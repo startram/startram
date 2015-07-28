@@ -3,15 +3,53 @@ require "http/server"
 require "./startram/*"
 
 module Startram
+  METHODS = %w[GET POST PUT PATCH DELETE]
+
   class App < HTTP::Handler
+    def initialize
+      @routes = {
+        "GET" => [] of Route
+        "POST" => [] of Route
+        "PUT" => [] of Route
+        "PATCH" => [] of Route
+        "DELETE" => [] of Route
+      }
+    end
+
+    {% for method in METHODS %}
+      def {{method.id.downcase}}(path, controller)
+        @routes[{{method}}] << Route.new(path, controller)
+      end
+    {% end %}
+
+    def draw
+      with self yield
+    end
+
     def call(request)
       request = Request.new(request)
 
-      if request.post?
-        HTTP::Response.new(201, "Hyperdrive initiated...", HTTP::Headers{"Content-type": "text/plain"})
-      else
-        HTTP::Response.ok("text/plain", "Hyperdriving!")
+      match = @routes[request.method].find do |route|
+        request.path == route.path
       end
+
+      if match
+        match.controller.call(request)
+      else
+        HTTP::Response.not_found
+      end
+    end
+  end
+
+  class Route
+    getter path, controller
+
+    def initialize(@path, @controller : Controller)
+    end
+  end
+
+  abstract class Controller < HTTP::Handler
+    def call(request : Request)
     end
   end
 
