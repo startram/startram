@@ -1,9 +1,21 @@
 require "./spec_helper"
 
-describe Startram do
-  # TODO: Write tests
+module Startram
+  describe Request do
+    describe "#params" do
+      it "contains body and query params" do
+        request = build_request("GET", "/?name=Amethyst&page=90",
+          body: "user=Andrew&id=5",
+          headers: HTTP::Headers{"Content-type": "application/x-www-form-urlencoded"}
+        )
 
-  it "works" do
-    false.should eq(true)
+        request.params.should eq Hash{
+          "user" => "Andrew"
+          "id" => "5"
+          "name" => "Amethyst"
+          "page" => "90"
+        }
+      end
+    end
   end
 end
