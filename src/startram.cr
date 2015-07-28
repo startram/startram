@@ -65,11 +65,12 @@ module Startram
     end
   end
 
-  class Response
+  class Response < HTTP::Response
     getter body
     getter headers
 
-    def initialize(@status = 200, @body = "", @headers = HTTP::Headers.new)
+    def initialize(status = 200, body = "", headers = HTTP::Headers.new)
+      super status, body, headers
     end
 
     def []=(key, value)
