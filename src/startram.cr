@@ -19,6 +19,8 @@ module Startram
     def initialize(@request)
     end
 
+    forward_missing_to @request
+
     def body
       @request.body
     end
