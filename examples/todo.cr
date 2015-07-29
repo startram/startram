@@ -24,7 +24,7 @@ class Task
   })
 end
 
-class TodoList < Startram::Controller
+class TodosController < Startram::Controller
   def index
     tasks = Task.all
 
@@ -36,10 +36,17 @@ class TodoList < Startram::Controller
   end
 end
 
+class WeatherController < Startram::Controller
+  def status
+    render body: "It is sunny with a slight chance of apocalypse!"
+  end
+end
+
 app = App.new
 
 app.draw do
-  get "/todos", TodoList, :index
+  get "/todos", TodosController, :index
+  get "/weather/status", WeatherController, :status
 end
 
 server = HTTP::Server.new(7777, app)
