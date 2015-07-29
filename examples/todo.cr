@@ -28,7 +28,7 @@ class TodosController < Startram::Controller
   def index
     tasks = Task.all
 
-    if @request.not_nil!.headers["Accept"].includes?("json")
+    if @request.headers["Accept"].includes?("json")
       render body: tasks.to_json, content_type: "application/json"
     else
       render body: TodosView.new(tasks).to_s
