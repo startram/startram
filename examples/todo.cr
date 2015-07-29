@@ -25,31 +25,21 @@ class Task
 end
 
 class TodoList < Startram::Controller
-  @tasks = [] of Task
+  def index
+    tasks = Task.all
 
-  def call(request)
-    @tasks = Task.all
-
-    render(request)
-  end
-
-  private def render(request)
-    if request.headers["Accept"].includes?("json")
-      Response.new body: render_json, headers: HTTP::Headers{"Content-Type": "application/json"}
+    if @request.not_nil!.headers["Accept"].includes?("json")
+      Response.new body: tasks.to_json, headers: HTTP::Headers{"Content-Type": "application/json"}
     else
-      Response.new body: render_html, headers: HTTP::Headers{"Content-Type": "text/html"}
+      Response.new body: render_html(tasks), headers: HTTP::Headers{"Content-Type": "text/html"}
     end
   end
 
-  private def render_json
-    @tasks.to_json
-  end
-
-  private def render_html
+  private def render_html(tasks)
     HTML::Builder.new.build do
       h1 { text "Todos" }
       ul do
-        @tasks.each do |task|
+        tasks.each do |task|
           li { text task.name }
         end
       end
@@ -60,7 +50,7 @@ end
 app = App.new
 
 app.draw do
-  get "/todos", TodoList.new
+  get "/todos", TodoList, :index
 end
 
 server = HTTP::Server.new(7777, app)

@@ -17,8 +17,8 @@ module Startram
     end
 
     {% for method in METHODS %}
-      def {{method.id.downcase}}(path, controller)
-        @routes[{{method}}] << Route.new(path, controller)
+      def {{method.id.downcase}}(path, controller_class, action)
+        @routes[{{method}}] << Route.new(path, controller_class.new, action)
       end
     {% end %}
 
@@ -32,7 +32,7 @@ module Startram
       match = @routes[request.method].find &.match?(request.path)
 
       if match
-        match.controller.call(request)
+        match.call(request)
       else
         HTTP::Response.not_found
       end
