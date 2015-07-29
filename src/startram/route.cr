@@ -1,6 +1,6 @@
 module Startram
   class Route
-    def initialize(path, @controller : Controller, @action)
+    def initialize(path, @controller_class, @action)
       @path_regex = compile(path)
     end
 
@@ -9,7 +9,7 @@ module Startram
     end
 
     def call(request)
-      @controller.call(@action.to_s, request)
+      @controller_class.new(request).call(@action.to_s)
     end
 
     private def compile(path)

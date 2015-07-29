@@ -18,7 +18,7 @@ module Startram
 
     {% for method in METHODS %}
       def {{method.id.downcase}}(path, controller_class, action)
-        @routes[{{method}}] << Route.new(path, controller_class.new, action)
+        @routes[{{method}}] << Route.new(path, controller_class, action)
       end
     {% end %}
 

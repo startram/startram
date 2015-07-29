@@ -1,7 +1,7 @@
 require "../src/startram"
-
-require "html/builder"
 require "json"
+
+require "./views/todos_view"
 
 include Startram
 
@@ -29,20 +29,9 @@ class TodoList < Startram::Controller
     tasks = Task.all
 
     if @request.not_nil!.headers["Accept"].includes?("json")
-      Response.new body: tasks.to_json, headers: HTTP::Headers{"Content-Type": "application/json"}
+      render body: tasks.to_json, content_type: "application/json"
     else
-      Response.new body: render_html(tasks), headers: HTTP::Headers{"Content-Type": "text/html"}
-    end
-  end
-
-  private def render_html(tasks)
-    HTML::Builder.new.build do
-      h1 { text "Todos" }
-      ul do
-        tasks.each do |task|
-          li { text task.name }
-        end
-      end
+      render body: TodosView.new(tasks).to_s
     end
   end
 end

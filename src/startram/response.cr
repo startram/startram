@@ -1,10 +1,10 @@
 module Startram
-  class Response < HTTP::Response
-    getter body
+  class Response
+    property body
+    property status
     getter headers
 
-    def initialize(status = 200, body = "", headers = HTTP::Headers.new)
-      super status, body, headers
+    def initialize(@status = 200, @body = "", @headers = HTTP::Headers.new)
     end
 
     def []=(key, value)
@@ -15,9 +15,8 @@ module Startram
       headers[key]
     end
 
-    def write(text)
-      @body += text
-      @headers["Content-Length"] = [@body.length.to_s]
+    def to_http_response
+      HTTP::Response.new @status, @body, @headers
     end
   end
 end
