@@ -44,7 +44,7 @@ end
 
 app = App.new
 
-app.draw do
+app.router.draw do
   get "/todos", TodosController, :index
   get "/weather/status", WeatherController, :status
 end

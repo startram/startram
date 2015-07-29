@@ -3,36 +3,18 @@ require "http/server"
 require "./startram/*"
 
 module Startram
-  METHODS = %w[GET POST PUT PATCH DELETE]
-
   class App < HTTP::Handler
+    getter router
+
     def initialize
-      @routes = {
-        "GET" => [] of Route
-        "POST" => [] of Route
-        "PUT" => [] of Route
-        "PATCH" => [] of Route
-        "DELETE" => [] of Route
-      }
-    end
-
-    {% for method in METHODS %}
-      def {{method.id.downcase}}(path, controller_class, action)
-        @routes[{{method}}] << Route.new(path, controller_class, action)
-      end
-    {% end %}
-
-    def draw
-      with self yield
+      @router = Router.new
     end
 
     def call(request)
       request = Request.new(request)
 
-      match = @routes[request.method].find &.match?(request.path)
-
-      if match
-        match.call(request)
+      if route = router.match(request.method, request.path)
+        route.call(request)
       else
         HTTP::Response.not_found
       end
