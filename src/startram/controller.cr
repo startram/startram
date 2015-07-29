@@ -4,13 +4,15 @@ module Startram
     end
 
     macro def call(method_name) : HTTP::Response
-      case method_name.to_s
-      {% for method in @type.methods %}
-        {% if method.args.length == 0 %}
-          when {{method.name.stringify}} then {{method.name}}
+      {% unless @type.abstract? %} # not applicable to base Controller
+        case method_name.to_s
+        {% for method in @type.methods %}
+          {% if method.args.length == 0 %}
+            when {{method.name.stringify}} then {{method.name}}
+          {% end %}
         {% end %}
+        end
       {% end %}
-      end
 
       @response.to_http_response
     end
