@@ -55,6 +55,7 @@ app.router.draw do
   get "/" { |request| Response.new body: "root :D" }
 end
 
-server = HTTP::Server.new(7777, app)
-puts "Listening to http://localhost:7777"
+port = ENV["PORT"]? || 7777
+server = HTTP::Server.new(port.to_i, app)
+puts "Listening to http://localhost:#{port}"
 server.listen
