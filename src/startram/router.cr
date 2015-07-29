@@ -1,15 +1,13 @@
 module Startram
   class Router
-    HTTP_METHODS = %w[GET POST PUT PATCH DELETE]
+    HTTP_METHODS = %w[GET POST PUT PATCH DELETE HEAD OPTIONS TRACE]
 
     def initialize
-      @routes = {
-        "GET" => [] of Route
-        "POST" => [] of Route
-        "PUT" => [] of Route
-        "PATCH" => [] of Route
-        "DELETE" => [] of Route
-      }
+      @routes = {} of String => Array(Route)
+
+      HTTP_METHODS.each do |method|
+        @routes[method] = [] of Route
+      end
     end
 
     {% for method in HTTP_METHODS %}
