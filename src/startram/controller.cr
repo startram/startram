@@ -23,6 +23,14 @@ module Startram
       @response.headers["Content-Type"] ||= content_type
     end
 
+    def headers
+      @request.headers
+    end
+
+    def accept
+      headers.fetch("Accept", nil)
+    end
+
     def params
       @request.params
     end
