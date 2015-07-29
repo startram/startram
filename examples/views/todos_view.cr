@@ -5,4 +5,8 @@ class TodosView
 
   def initialize(@tasks)
   end
+
+  def cats_are_awesome(text)
+    "#{text} cats are awesome!"
+  end
 end
