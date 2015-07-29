@@ -22,5 +22,9 @@ module Startram
       @response.status = status
       @response.headers["Content-Type"] ||= content_type
     end
+
+    def params
+      @request.params
+    end
   end
 end

@@ -34,6 +34,10 @@ class TodosController < Startram::Controller
       render body: TodosView.new(tasks).to_s
     end
   end
+
+  def show
+    render body: "Show: #{params}"
+  end
 end
 
 class WeatherController < Startram::Controller
@@ -46,6 +50,7 @@ app = App.new
 
 app.router.draw do
   get "/todos", TodosController, :index
+  get "/todos/:id", TodosController, :show
   get "/weather/status", WeatherController, :status
   get "/" { |request| Response.new body: "root :D" }
 end

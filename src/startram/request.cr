@@ -1,6 +1,9 @@
 module Startram
   class Request
+    getter path_params
+
     def initialize(@request)
+      @path_params = {} of String => String
     end
 
     forward_missing_to @request
@@ -17,8 +20,13 @@ module Startram
       @request.path
     end
 
+    def path_params=(path_params)
+      @params = nil # reset memoized params
+      @path_params = path_params
+    end
+
     def params
-      body_params.merge(query_params)
+      @params ||= body_params.merge(query_params).merge(path_params)
     end
 
     def query_params
