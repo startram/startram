@@ -16,6 +16,10 @@ module Startram
       def {{method.id.downcase}}(path, controller_class, action)
         @routes[{{method}}] << Route.new(path, controller_class, action)
       end
+
+      def {{method.id.downcase}}(path, &block : Request -> Response)
+        @routes[{{method}}] << Route.new(path, &block)
+      end
     {% end %}
 
     def draw

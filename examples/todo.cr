@@ -47,6 +47,7 @@ app = App.new
 app.router.draw do
   get "/todos", TodosController, :index
   get "/weather/status", WeatherController, :status
+  get "/" { |request| Response.new body: "root :D" }
 end
 
 server = HTTP::Server.new(7777, app)

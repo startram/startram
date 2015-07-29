@@ -3,7 +3,7 @@ module Startram
     def initialize(@request, @response = Response.new 404)
     end
 
-    macro def call(method_name) : HTTP::Response
+    macro def call(method_name) : Response
       {% unless @type.abstract? %} # not applicable to base Controller
         case method_name.to_s
         {% for method in @type.methods %}
@@ -14,7 +14,7 @@ module Startram
         end
       {% end %}
 
-      @response.to_http_response
+      @response
     end
 
     def render(body = "", content_type = "text/html", status = 200)
