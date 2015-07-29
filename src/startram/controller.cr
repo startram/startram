@@ -15,8 +15,9 @@ module Startram
       @response.to_http_response
     end
 
-    def render(body = "", content_type = "text/html")
+    def render(body = "", content_type = "text/html", status = 200)
       @response.body = body
+      @response.status = status
       @response.headers["Content-Type"] ||= content_type
     end
   end
