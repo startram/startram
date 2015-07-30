@@ -5,6 +5,9 @@ module Startram
     end
 
     macro def call(method_name) : Response
+      puts "Processing by #{self.class}#{method_name} as #{accept || "unknown"}"
+      puts "  Parameters: #{@request.params}"
+
       {% unless @type.abstract? %} # not applicable to base Controller
         case method_name.to_s
         {% for method in @type.methods %}

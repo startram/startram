@@ -22,9 +22,9 @@ module Startram
 
     def handlers
       [
-        HTTP::LogHandler.new
         HTTP::ErrorHandler.new
         Startram::Handlers::StaticFileHandler.new("#{@root}/public")
+        Startram::Handlers::RequestLogHandler.new
         self
       ]
     end
