@@ -3,7 +3,7 @@ require "json"
 
 require "./app/**"
 
-app = Startram::App.new
+app = Startram::App.new(__DIR__)
 
 app.router.draw do
   get "/todos", TodosController, :index

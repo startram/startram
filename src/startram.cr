@@ -6,7 +6,7 @@ module Startram
   class App < HTTP::Handler
     getter router
 
-    def initialize
+    def initialize(@root)
       @router = Router.new
     end
 
@@ -24,6 +24,7 @@ module Startram
       [
         HTTP::LogHandler.new
         HTTP::ErrorHandler.new
+        HTTP::StaticFileHandler.new("#{@root}/public")
         self
       ]
     end
