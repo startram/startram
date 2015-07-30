@@ -53,6 +53,7 @@ app.router.draw do
   get "/todos/:id", TodosController, :show
   get "/weather/status", WeatherController, :status
   get "/" { |request| Response.new body: "root :D" }
+  get "/slow" { |request| sleep 0.3; Startram::Response.new body: "slow :/" }
 end
 
 port = ENV["PORT"]? || 7777
