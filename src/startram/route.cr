@@ -2,7 +2,7 @@ module Startram
   class Route
     def initialize(path, controller_class, action)
       @path_regex = compile(path)
-      @handler = -> (request : Request) { controller_class.new(request).call(action.to_s) }
+      @handler = -> (request : Request) { controller_class.new(request).call(action) }
     end
 
     def initialize(path, &block : Request -> Response)
