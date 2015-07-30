@@ -1,6 +1,7 @@
 module Startram
-  abstract class Controller < HTTP::Handler
-    def initialize(@request, @response = Response.new 404)
+  abstract class Controller
+    def initialize(@request)
+      @response = Response.new 404
     end
 
     macro def call(method_name) : Response

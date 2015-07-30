@@ -3,8 +3,6 @@ require "json"
 
 require "./views/todos_view"
 
-include Startram
-
 class Task
   def self.all
     [
@@ -46,17 +44,14 @@ class WeatherController < Startram::Controller
   end
 end
 
-app = App.new
+app = Startram::App.new
 
 app.router.draw do
   get "/todos", TodosController, :index
   get "/todos/:id", TodosController, :show
   get "/weather/status", WeatherController, :status
-  get "/" { |request| Response.new body: "root :D" }
+  get "/" { |request| Startram::Response.new body: "root :D" }
   get "/slow" { |request| sleep 0.3; Startram::Response.new body: "slow :/" }
 end
 
-port = ENV["PORT"]? || 7777
-server = HTTP::Server.new(port.to_i, app)
-puts "Listening to http://localhost:#{port}"
-server.listen
+app.serve

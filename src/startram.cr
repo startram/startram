@@ -19,5 +19,20 @@ module Startram
         HTTP::Response.not_found
       end
     end
+
+    def handlers
+      [
+        HTTP::LogHandler.new
+        HTTP::ErrorHandler.new
+        self
+      ]
+    end
+
+    def serve
+      port = ENV["PORT"]? || 7777
+      server = HTTP::Server.new(port.to_i, handlers)
+      puts "Listening to http://localhost:#{port}"
+      server.listen
+    end
   end
 end
