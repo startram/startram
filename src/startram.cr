@@ -1,6 +1,6 @@
 require "http/server"
 
-require "./startram/*"
+require "./startram/**"
 
 module Startram
   class App < HTTP::Handler
@@ -24,7 +24,7 @@ module Startram
       [
         HTTP::LogHandler.new
         HTTP::ErrorHandler.new
-        HTTP::StaticFileHandler.new("#{@root}/public")
+        Startram::Handlers::StaticFileHandler.new("#{@root}/public")
         self
       ]
     end
