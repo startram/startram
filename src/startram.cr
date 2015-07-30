@@ -13,7 +13,7 @@ module Startram
     def call(request)
       request = Request.new(request)
 
-      if route = router.match(request.method, request.path)
+      if route = router.match(request.params.fetch("_method", request.method), request.path)
         route.call(request).to_http_response
       else
         HTTP::Response.not_found
