@@ -1,5 +1,4 @@
 require "../../src/startram"
-require "json"
 
 require "./app/**"
 

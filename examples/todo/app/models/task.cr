@@ -1,3 +1,5 @@
+require "json"
+
 class Task
   def self.all
     [
