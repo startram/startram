@@ -25,6 +25,11 @@ module Startram
       @response.headers["Content-Type"] ||= content_type
     end
 
+    private def redirect_to(path)
+      @response.status = 302
+      @response.headers["Location"] = path
+    end
+
     private def headers
       @request.headers
     end
