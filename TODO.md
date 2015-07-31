@@ -1,6 +1,8 @@
 - [x] Log params
 - [x] Resource routing
-- [ ] Automatic rendering of views
+- [x] Better view rendering
+- [ ] Automatic rendering of unprocessed controller actions
+- [ ] Routing in config file (requires app constant?)
 - [ ] Layouts
 - [ ] Use Logger and log to file
 - [ ] Nested parameter parsing
