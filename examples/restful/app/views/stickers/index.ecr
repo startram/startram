@@ -1,0 +1,15 @@
+<h1>Stickers</h1>
+
+<ul>
+  <% stickers.each do |sticker| %>
+    <li>
+      <a href="/stickers/<%= sticker.id %>"><%= sticker.title %></a>
+      |
+      <a href="/stickers/<%= sticker.id %>/edit">edit</a>
+      |
+      <a href="/stickers/<%= sticker.id %>?_method=DELETE">destroy</a>
+    </li>
+  <% end %>
+</ul>
+
+<a href="/stickers/new">New Sticker</a>

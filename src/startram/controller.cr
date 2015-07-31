@@ -6,17 +6,24 @@ module Startram
       @response = Response.new 404
     end
 
-    macro def call(method_name) : Response
-      puts "Processing by #{self.class}#{method_name} as #{accept || "unknown"}"
+    macro def call(action) : Response
+      puts "Processing by #{self.class}#{action} as #{accept || "unknown"}"
       puts "  Parameters: #{@request.params}"
 
-      case method_name
+      case action
         {% for method in @type.methods.select { |m| m.visibility == :public } %}
           when :{{method.name}} then {{method.name}}
         {% end %}
       end
 
       @response
+    end
+
+    macro view(action)
+      {% view_class = @type.id.gsub(/Controller\z/, "")+action.id.stringify.camelcase+"View" %}
+      view_instance = {{view_class.id}}.new(self)
+
+      render body: view_instance.to_s
     end
 
     private def render(body = "", content_type = "text/html", status = 200)

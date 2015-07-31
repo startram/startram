@@ -1,0 +1,9 @@
+<h1>Edit <%= sticker.title %></h1>
+
+<form method="POST" action="/stickers/<%= sticker.id %>">
+  <input type="hidden" name="_method" value="PUT"></input>
+  <input type="text" name="title" placeholder="Title" value="<%= sticker.title %>"></input>
+  <input type="submit" value="Submit"></input>
+</form>
+
+<a href="/stickers">Back to list</a>
