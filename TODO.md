@@ -1,0 +1,14 @@
+- [x] Log params
+- [x] Resource routing
+- [ ] Automatic rendering of views
+- [ ] Layouts
+- [ ] Use Logger and log to file
+- [ ] Nested parameter parsing
+- [ ] Directory conventions
+- [ ] Generators
+- [ ] Testing
+- [x] Static files
+- [x] Mime types
+- [ ] Front end handling (brunch?)
+- [ ] Static file digest + caching
+- [ ] README.md
