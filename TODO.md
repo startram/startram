@@ -6,7 +6,8 @@
 - [ ] Routing in config file (requires app constant?)
 - [ ] Layouts
 - [ ] Use Logger and log to file
-- [ ] Nested parameter parsing
+- [x] Nested parameter parsing
+- [ ] Safe nested parameters (size/depth restriction like in Rack)
 - [ ] Directory conventions
 - [ ] Generators
 - [ ] Testing
