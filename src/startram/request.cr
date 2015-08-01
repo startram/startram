@@ -1,3 +1,5 @@
+require "../rack/utils"
+
 module Startram
   class Request
     getter path_params
@@ -26,7 +28,12 @@ module Startram
     end
 
     def params
-      @params ||= body_params.merge(query_params).merge(path_params)
+      @params ||= begin
+        params = {} of String => Rack::Utils::NestedParams
+        params.merge! body_params
+        params.merge! query_params
+        params.merge! path_params
+      end
     end
 
     def query_params
@@ -41,21 +48,8 @@ module Startram
       URI.parse(path).query
     end
 
-    private def parse_parameters(params_string)
-      hash = {} of String => String
-      params = params_string.to_s.split("&")
-
-      unless params.empty?
-        params.each do |param|
-          if match = /^(?<key>[^=]*)(=(?<value>.*))?$/.match(param)
-            key, value = param.split("=").map { |s| CGI.unescape(s) }
-
-            hash[key as String] = value
-          end
-        end
-      end
-
-      hash
+    private def parse_parameters(string)
+      Rack::Utils.parse_nested_query(string)
     end
   end
 end
