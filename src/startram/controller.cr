@@ -7,8 +7,8 @@ module Startram
     end
 
     macro def call(action) : Response
-      puts "Processing by #{self.class}#{action} as #{accept || "unknown"}"
-      puts "  Parameters: #{@request.params}"
+      Startram.log.debug "Processing by #{self.class}#{action} as #{accept || "unknown"}"
+      Startram.log.debug "  Parameters: #{@request.params}"
 
       case action
         {% for method in @type.methods.select { |m| m.visibility == :public } %}

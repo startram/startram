@@ -4,15 +4,13 @@ class Startram::Handlers::RequestLogHandler < HTTP::Handler
   def call(request)
     time = Time.now
 
-    puts ""
-    puts "Started #{request.method} '#{request.path}' at #{time}"
+    Startram.log.info "\nStarted #{request.method} '#{request.path}' at #{time}"
 
     response = call_next(request)
     elapsed = Time.now - time
     elapsed_text = elapsed_text(elapsed)
 
-    puts "Completed #{response.status_code} in #{elapsed_text}"
-    puts ""
+    Startram.log.info "Completed #{response.status_code} in #{elapsed_text}\n"
 
     response
   end

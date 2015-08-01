@@ -1,12 +1,21 @@
 require "http/server"
+require "logger"
 
 require "./startram/**"
 
 module Startram
+  def self.log
+    @@log ||= Logger.new(STDOUT).tap do |logger|
+      logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
+        io << message
+      end
+    end
+  end
+
   class App < HTTP::Handler
     getter router
 
-    def initialize(@root = ".")
+    def initialize(@root)
       @router = Router.new
     end
 
@@ -32,7 +41,7 @@ module Startram
     def serve
       port = ENV["PORT"]? || 7777
       server = HTTP::Server.new(port.to_i, handlers)
-      puts "Listening to http://localhost:#{port}"
+      Startram.log.info "Listening to http://localhost:#{port}"
       server.listen
     end
   end

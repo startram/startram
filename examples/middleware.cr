@@ -20,5 +20,5 @@ app.router.draw do
 end
 
 server = HTTP::Server.new(7777, [Middleware.new, app])
-puts "Listening to http://localhost:7777"
+Startram.log.info "Listening to http://localhost:7777"
 server.listen
