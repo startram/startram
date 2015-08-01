@@ -1,6 +1,7 @@
 - [x] Log params
 - [x] Resource routing
 - [x] Better view rendering
+- [ ] Auto recompile on file change
 - [ ] Automatic rendering of unprocessed controller actions
 - [ ] Routing in config file (requires app constant?)
 - [ ] Layouts
