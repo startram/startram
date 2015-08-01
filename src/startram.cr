@@ -6,7 +6,7 @@ module Startram
   class App < HTTP::Handler
     getter router
 
-    def initialize(@root)
+    def initialize(@root = ".")
       @router = Router.new
     end
 
