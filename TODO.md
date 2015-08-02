@@ -1,18 +1,19 @@
 - [x] Log params
 - [x] Resource routing
 - [x] Better view rendering
+- [x] Use Logger
+- [x] Nested parameter parsing
+- [x] Static files
+- [x] Mime types
 - [ ] Auto recompile on file change
-- [ ] Automatic rendering of unprocessed controller actions
+- [ ] Path helpers in controller/views
 - [ ] Routing in config file (requires app constant?)
 - [ ] Layouts
-- [ ] Use Logger and log to file
-- [x] Nested parameter parsing
 - [ ] Safe nested parameters (size/depth restriction like in Rack)
 - [ ] Directory conventions
 - [ ] Generators
 - [ ] Testing
-- [x] Static files
-- [x] Mime types
 - [ ] Front end handling (brunch?)
 - [ ] Static file digest + caching
 - [ ] README.md
+- [ ] Automatic rendering of unprocessed controller actions?
