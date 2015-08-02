@@ -9,6 +9,8 @@ module Startram
       logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
         io << message
       end
+
+      logger.level = Logger::DEBUG
     end
   end
 
