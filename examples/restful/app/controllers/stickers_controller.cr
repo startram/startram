@@ -14,6 +14,8 @@ class StickersController < Startram::Controller
   end
 
   def new
+    @sticker = Sticker.new()
+
     view :new
   end
 
@@ -24,7 +26,7 @@ class StickersController < Startram::Controller
   end
 
   def create
-    sticker = Sticker.new(params["title"])
+    sticker = Sticker.new(sticker_params)
 
     sticker.save
 
@@ -34,7 +36,7 @@ class StickersController < Startram::Controller
   def update
     sticker = Sticker.find(params["id"])
 
-    sticker.title = params["title"]
+    sticker.assign_attributes(sticker_params)
 
     redirect_to "/stickers"
   end
@@ -43,5 +45,9 @@ class StickersController < Startram::Controller
     Sticker.destroy(params["id"])
 
     redirect_to "/stickers"
+  end
+
+  private def sticker_params
+    params["sticker"] as Hash(String, Rack::Utils::NestedParams)
   end
 end

@@ -1,11 +1,10 @@
 class Sticker
-  property id
-  property title
+  include Startram::Model
 
-  def initialize(@title, @id = nil)
-  end
+  field :id, Int32
+  field :title
 
-  @@stickers = { 1 => new("Hello There", 1) }
+  @@stickers = { 1 => new({"id" => 1, "title" => "Hello There"}) }
   @@initial_id = @@stickers.length
 
   def self.all
@@ -13,15 +12,20 @@ class Sticker
   end
 
   def self.find(id)
-    @@stickers[id.to_i]
+    puts @@stickers.keys
+    @@stickers[id.to_s.to_i]
   end
 
   def self.destroy(id)
-    @@stickers.delete(id.to_i)
+    @@stickers.delete(id.to_s.to_i)
   end
 
   def save
-    @id ||= @@initial_id += 1
-    @@stickers[@id.to_i] = self
+    self.id ||= @@initial_id += 1
+    @@stickers[id.not_nil!] = self
+  end
+
+  def persisted?
+    id
   end
 end
