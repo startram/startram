@@ -34,14 +34,7 @@ recursive_find(".ecr", view_dir).each do |file|
   underscored_name = file.gsub(view_dir, "").split("/").reject(&.empty?).join("_")
   class_name = File.basename(underscored_name, ".ecr").camelcase
   puts %(
-    class #{class_name}View
-      def initialize(@controller)
-      end
-
-      macro method_missing(name)
-        @controller.@{{name.id}}.not_nil!
-      end
-
+    class #{class_name}View < Startram::View
       ecr_file "#{file}"
     end
   )
