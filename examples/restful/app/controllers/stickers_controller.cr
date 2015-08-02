@@ -1,5 +1,3 @@
-require "html/builder"
-
 class StickersController < Startram::Controller
   def index
     @stickers = Sticker.all
