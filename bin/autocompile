@@ -26,15 +26,21 @@ def spawn_crystal
   loop do
     start_time = Time.now
     puts "\nCompiling #{@app_path}"
-    `#{build_command}`
-    elapsed = Time.now - start_time
-    puts "Compiled in #{elapsed.round(2)}sec\n\n"
+    build_success = system(build_command)
 
-    Open3.popen3(target) do |stdin, stdout, stderr, thread|
-      @app_pid = thread[:pid]
-      stdout.each do |line|
-        puts line
+    if build_success
+      elapsed = Time.now - start_time
+      puts "Compiled in #{elapsed.round(2)}sec\n\n"
+
+      Open3.popen3(target) do |stdin, stdout, stderr, thread|
+        @app_pid = thread[:pid]
+        stdout.each do |line|
+          puts line
+        end
       end
+    else
+      puts "Build failed, press any key to try again..."
+      $stdin.readline
     end
   end
 end
@@ -44,12 +50,10 @@ dirs = Dir["src/**/"] + Dir["examples/**/"] + Dir["spec/**/"]
 listener = Listen.to(*dirs) do |modified, added, removed|
   if @app_pid
     Process.kill("QUIT", @app_pid)
-  else
-    puts "crystal not running?"
   end
 end
 
-listener.only /\.cr/
+listener.only /\.(cr|ecr)/
 listener.start
 
 spawn_crystal
