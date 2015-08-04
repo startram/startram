@@ -2,8 +2,11 @@ require "html/builder"
 
 module Startram
   abstract class View
-    def initialize(@controller)
+    # @content is for the layouts, used with <%= content %> rather than <%= yield %>
+    def initialize(@controller, @content = nil)
     end
+
+    getter content
 
     def form_for(model)
       FormBuilder.new(model)

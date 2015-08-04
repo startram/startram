@@ -19,9 +19,20 @@ module Startram
       @response
     end
 
+    macro layout(layout)
+      {% layout_class = "Layouts"+layout.id.stringify.camelcase+"View" %}
+      @layout_view_class = {{layout_class.id}}
+    end
+
     macro view(action)
       {% view_class = @type.id.gsub(/Controller\z/, "")+action.id.stringify.camelcase+"View" %}
       view_instance = {{view_class.id}}.new(self)
+
+      if @layout_view_class
+        content = view_instance.to_s
+        layout_instance = @layout_view_class.new(self, content: content)
+        view_instance = layout_instance
+      end
 
       render body: view_instance.to_s
     end
