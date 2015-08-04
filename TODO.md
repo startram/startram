@@ -5,10 +5,10 @@
 - [x] Nested parameter parsing
 - [x] Static files
 - [x] Mime types
-- [ ] Auto recompile on file change
+- [x] Auto recompile on file change
+- [x] Layouts
 - [ ] Path helpers in controller/views
 - [ ] Routing in config file (requires app constant?)
-- [ ] Layouts
 - [ ] Safe nested parameters (size/depth restriction like in Rack)
 - [ ] Directory conventions
 - [ ] Generators
