@@ -1,20 +1,38 @@
 module Startram
   module Model
-    alias Attributes = Hash(String, String | Int32 | Int64 | Nil | Time | Bool)
+    alias Values = String | Int32 | Int64 | Nil | Time | Bool
+    alias Attributes = Hash(String, Values)
+
+    class FieldData
+      getter name, type
+
+      def initialize(@name, @type, default = nil)
+        unless default.nil?
+          @default = default.is_a?(Proc) ? default : -> { default as Values }
+        end
+      end
+
+      def default
+        if @default
+          (@default as Proc).call
+        end
+      end
+    end
 
     macro included
-      @@fields = {} of Symbol => Symbol
+      @@fields = {} of Symbol => FieldData
 
       def initialize(attributes = Attributes.new)
         @attributes = Attributes.new
         @persisted = false
 
         assign_attributes(attributes)
+        set_default_values
       end
     end
 
-    macro field(name, type = String)
-      @@fields[{{name}}] = :{{type}}
+    macro field(name, type, default = nil)
+      @@fields[{{name}}] = FieldData.new({{name.id.stringify}}, :{{type}}, {{default}})
 
       def {{name.id}}
         attributes[{{name.id.stringify}}]? as {{type}}?
@@ -34,10 +52,17 @@ module Startram
     end
 
     def assign_attributes(attributes)
-      fields.each do |name, type|
-        attribute = name.to_s
-        if attributes.has_key?(attribute)
-          @attributes[attribute] = cast(attributes[attribute], type)
+      fields.each do |name, data|
+        if attributes.has_key?(data.name)
+          @attributes[data.name] = cast(attributes[data.name], data.type)
+        end
+      end
+    end
+
+    private def set_default_values
+      fields.each do |name, data|
+        unless attributes.has_key?(data.name)
+          attributes[data.name] = data.default if data.default
         end
       end
     end

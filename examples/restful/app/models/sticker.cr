@@ -2,7 +2,7 @@ class Sticker
   include Startram::Model
 
   field :id, Int32
-  field :title
+  field :title, String
 
   @@stickers = { 1 => new({"id" => 1, "title" => "Hello There"}) }
   @@initial_id = @@stickers.length

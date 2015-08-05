@@ -3,11 +3,11 @@ require "../spec_helper"
 class TestModel
   include Startram::Model
 
-  field :id, type: Int32
-  field :name
-  field :age, type: Int32
-  field :poked_at, type: Time
-  field :happy, type: Bool
+  field :id, Int32
+  field :name, String
+  field :age, Int32
+  field :poked_at, Time, default: -> { Time.at(108) }
+  field :happy, Bool, default: true
 end
 
 module Startram
@@ -53,6 +53,23 @@ module Startram
         end
       end
 
+      describe "default argument" do
+        it "gets used as default value" do
+          TestModel.new.happy.should be_true
+        end
+
+        it "runs a lambda" do
+          TestModel.new.poked_at.should eq Time.at(108)
+        end
+
+        it "gets overridden by nil" do
+          model = TestModel.new({"happy" => nil, "poked_at" => nil})
+
+          model.happy.should be_nil
+          model.poked_at.should be_nil
+        end
+      end
+
       it "is nilable" do
         model.name = "foo"
         model.name = nil
@@ -69,14 +86,9 @@ module Startram
     end
 
     describe "#fields" do
-      it "returns the model fields" do
-        model.fields.should eq({
-          :id => :Int32
-          :name => :String
-          :age => :Int32
-          :poked_at => :Time
-          :happy => :Bool
-        })
+      it "returns the model fields and data" do
+        model.fields.keys.should eq([:id, :name, :age, :poked_at, :happy])
+        model.fields.values.first.type.should eq :Int32
       end
     end
 
