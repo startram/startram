@@ -12,7 +12,6 @@ class Sticker
   end
 
   def self.find(id)
-    puts @@stickers.keys
     @@stickers[id.to_s.to_i]
   end
 
