@@ -33,7 +33,7 @@ module Startram
 
       if @layout_view_class
         content = view_instance.to_s
-        layout_instance = @layout_view_class.new(self, content: content)
+        layout_instance = @layout_view_class.not_nil!.new(self, content: content)
         view_instance = layout_instance
       end
 
