@@ -10,11 +10,14 @@ module Startram
       Startram.log.debug "Processing by #{self.class}#{action} as #{accept || "unknown"}"
       Startram.log.debug "  Parameters: #{@request.params}"
 
-      case action
-        {% for method in @type.methods.select { |m| m.visibility == :public } %}
-          when :{{method.name}} then {{method.name}}
-        {% end %}
-      end
+      {% public_methods = @type.methods.select { |m| m.visibility == :public } %}
+      {% unless public_methods.empty? %}
+        case action
+          {% for method in public_methods %}
+            when :{{method.name}} then {{method.name}}
+          {% end %}
+        end
+      {% end %}
 
       @response
     end
