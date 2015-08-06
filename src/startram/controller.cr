@@ -8,7 +8,7 @@ module Startram
 
     macro def call(action) : Response
       Startram.log.debug "Processing by #{self.class}#{action} as #{accept || "unknown"}"
-      Startram.log.debug "  Parameters: #{@request.params}"
+      Startram.log.debug "  Parameters: #{request.params}"
 
       {% public_methods = @type.methods.select { |m| m.visibility == :public } %}
       {% unless public_methods.empty? %}
@@ -19,7 +19,7 @@ module Startram
         end
       {% end %}
 
-      @response
+      response
     end
 
     macro layout(layout)
@@ -40,19 +40,27 @@ module Startram
       render body: view_instance.to_s
     end
 
+    private def response
+      @response
+    end
+
+    private def request
+      @request
+    end
+
     private def render(body = "", content_type = "text/html", status = 200)
-      @response.body = body
-      @response.status = status
-      @response.headers["Content-Type"] ||= content_type
+      response.body = body
+      response.status = status
+      response.headers["Content-Type"] ||= content_type
     end
 
     private def redirect_to(path)
-      @response.status = 302
-      @response.headers["Location"] = path
+      response.status = 302
+      response.headers["Location"] = path
     end
 
     private def headers
-      @request.headers
+      request.headers
     end
 
     private def accept
@@ -60,7 +68,7 @@ module Startram
     end
 
     private def params
-      @request.params
+      request.params
     end
   end
 end
