@@ -1,3 +1,5 @@
+require "activesupport/activesupport/core_ext/string"
+
 module Startram
   class Router
     HTTP_METHODS = %w[GET POST PUT PATCH DELETE HEAD OPTIONS TRACE]
@@ -32,15 +34,19 @@ module Startram
     end
 
     macro resources(name)
-      {% resource_path = "/#{name.id}" %}
       {% controller = "#{name.id.stringify.camelcase.id}Controller".id %}
-      get {{resource_path}}, {{controller}}, :index
-      get {{resource_path}} + "/new", {{controller}}, :new
-      get {{resource_path}} + "/:id", {{controller}}, :show
-      get {{resource_path}} + "/:id/edit", {{controller}}, :edit
-      post {{resource_path}}, {{controller}}, :create
-      put {{resource_path}} + "/:id", {{controller}}, :update
-      delete {{resource_path}} + "/:id", {{controller}}, :destroy
+
+      resource_path = "/{{name.id}}"
+      singular = {{name.id.stringify}}.singularize
+      plural = {{name.id.stringify}}.pluralize
+
+      get resource_path, {{controller}}, :index, name: plural
+      get "#{resource_path}/new", {{controller}}, :new, name: "new_#{singular}"
+      get "#{resource_path}/:id", {{controller}}, :show, name: singular
+      get "#{resource_path}/:id/edit", {{controller}}, :edit, name: "edit_#{singular}"
+      post resource_path, {{controller}}, :create, name: plural
+      put "#{resource_path}/:id", {{controller}}, :update, name: singular
+      delete "#{resource_path}/:id", {{controller}}, :destroy, name: singular
     end
 
     def draw
@@ -59,6 +65,8 @@ module Startram
         {% method_parts = name.id.stringify.split("_") %}
         {% suffix = method_parts.last %}
         {% route_name = method_parts.select {|s| s != "path" }.join("_") %}
+
+        raise "Method not found '{{name.id}}' for #{self.class}" unless @named_routes.has_key?({{route_name}})
 
         route = @named_routes[{{route_name}}]
         route.path({{*args}})
