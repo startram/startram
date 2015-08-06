@@ -25,9 +25,10 @@ module Startram
 
     def call(request)
       request = Request.new(request)
+      context = Context.new(request, self)
 
       if route = router.match(request.params.fetch("_method", request.method), request.path)
-        route.call(request).to_http_response
+        route.call(context).to_http_response
       else
         HTTP::Response.not_found
       end

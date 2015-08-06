@@ -15,17 +15,17 @@ module Startram
 
     {% for method in HTTP_METHODS %}
       def {{method.id.downcase}}(path, controller_class, action, name = nil)
-        block = -> (request : Request) { controller_class.new(request).call(action) }
+        block = -> (context : Context) { controller_class.new(context).call(action) }
 
         add_route({{method}}, path, name, &block)
       end
 
-      def {{method.id.downcase}}(path, name = nil, &block : Request -> Response)
+      def {{method.id.downcase}}(path, name = nil, &block : Context -> Response)
         add_route({{method}}, path, name, &block)
       end
     {% end %}
 
-    def add_route(method, path, name, &block : Request -> Response)
+    def add_route(method, path, name, &block : Context -> Response)
       route = Route.new(path, &block)
       name = name || path.split("/").select { |s| !s.empty? }.join("_")
 

@@ -1,6 +1,6 @@
 module Startram
   class Route
-    def initialize(path, &block : Request -> Response)
+    def initialize(path, &block : Context -> Response)
       @path = path
       @named_parameters = Set(String).new
       @path_regex = compile(path)
@@ -22,9 +22,9 @@ module Startram
       @path_regex.match(path_before_query_or_anchor)
     end
 
-    def call(request)
-      request.path_params = path_params(request.path)
-      @handler.call(request)
+    def call(context)
+      context.request.path_params = path_params(context.request.path)
+      @handler.call(context)
     end
 
     private def compile(path)

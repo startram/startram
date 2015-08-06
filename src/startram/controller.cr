@@ -2,8 +2,7 @@ require "cgi"
 
 module Startram
   abstract class Controller
-    def initialize(@request)
-      @response = Response.new 404
+    def initialize(@context)
     end
 
     macro def call(action) : Response
@@ -41,11 +40,11 @@ module Startram
     end
 
     private def response
-      @response
+      @context.response
     end
 
     private def request
-      @request
+      @context.request
     end
 
     private def render(body = "", content_type = "text/html", status = 200)

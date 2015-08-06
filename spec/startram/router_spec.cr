@@ -5,7 +5,7 @@ end
 
 module Startram
   describe Router do
-    handler = -> (request : Request) { Response.new }
+    handler = -> (con : Context) { Response.new }
 
     it "adds route helpers" do
       router = Router.new
