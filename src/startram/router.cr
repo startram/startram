@@ -3,6 +3,7 @@ module Startram
     HTTP_METHODS = %w[GET POST PUT PATCH DELETE HEAD OPTIONS TRACE]
 
     def initialize
+      @named_routes = {} of String => Route
       @routes = {} of String => Array(Route)
 
       HTTP_METHODS.each do |method|
@@ -11,14 +12,24 @@ module Startram
     end
 
     {% for method in HTTP_METHODS %}
-      def {{method.id.downcase}}(path, controller_class, action)
-        @routes[{{method}}] << Route.new(path, controller_class, action)
+      def {{method.id.downcase}}(path, controller_class, action, name = nil)
+        block = -> (request : Request) { controller_class.new(request).call(action) }
+
+        add_route({{method}}, path, name, &block)
       end
 
-      def {{method.id.downcase}}(path, &block : Request -> Response)
-        @routes[{{method}}] << Route.new(path, &block)
+      def {{method.id.downcase}}(path, name = nil, &block : Request -> Response)
+        add_route({{method}}, path, name, &block)
       end
     {% end %}
+
+    def add_route(method, path, name, &block : Request -> Response)
+      route = Route.new(path, &block)
+      name = name || path.split("/").select { |s| !s.empty? }.join("_")
+
+      @routes[method] << route
+      @named_routes[name] = route
+    end
 
     macro resources(name)
       {% resource_path = "/#{name.id}" %}
@@ -38,6 +49,24 @@ module Startram
 
     def match(method, path)
       @routes[method].find &.match?(path)
+    end
+
+    class URLHelpers
+      def initialize(@named_routes)
+      end
+
+      macro method_missing(name, args, block)
+        {% method_parts = name.id.stringify.split("_") %}
+        {% suffix = method_parts.last %}
+        {% route_name = method_parts.select {|s| s != "path" }.join("_") %}
+
+        route = @named_routes[{{route_name}}]
+        route.path({{*args}})
+      end
+    end
+
+    def url_helpers
+      @url_helpers ||= URLHelpers.new(@named_routes)
     end
   end
 end

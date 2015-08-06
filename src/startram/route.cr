@@ -1,13 +1,20 @@
 module Startram
   class Route
-    def initialize(path, controller_class, action)
-      @path_regex = compile(path)
-      @handler = -> (request : Request) { controller_class.new(request).call(action) }
-    end
-
     def initialize(path, &block : Request -> Response)
+      @path = path
+      @named_parameters = Set(String).new
       @path_regex = compile(path)
       @handler = block
+    end
+
+    def path(*args)
+      path = @path
+
+      @named_parameters.each_with_index do |name, index|
+        path = path.gsub(":#{name}", args[index])
+      end
+
+      path
     end
 
     def match?(path)
@@ -25,7 +32,14 @@ module Startram
 
       segments = path.split("/").map do |segment|
         segment.gsub(/:(?<name>\w+)/) do |s, m|
-          "(?<#{m["name"]}>[^/?#]+)"
+          name = m["name"]
+
+          if @named_parameters.includes?(name)
+            raise "ERROR: Can't have multiple named parameters in a route with the same name (#{name})"
+          end
+
+          @named_parameters << name
+          "(?<#{name}>[^/?#]+)"
         end
       end
 
