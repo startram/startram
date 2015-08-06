@@ -10,6 +10,10 @@ module Startram
     def path(*args)
       path = @path
 
+      if args.length != @named_parameters.length
+        raise ArgumentError.new("Expected arguments for :#{@named_parameters.join(", :")}, got: #{args}")
+      end
+
       @named_parameters.each_with_index do |name, index|
         path = path.gsub(":#{name}", args[index])
       end
