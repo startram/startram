@@ -42,7 +42,7 @@ module Startram
     macro method_missing(name, args, block)
       {% raise "no way" unless name.id.stringify.ends_with?("path") %}
 
-      @context.app.router.url_helpers.{{name.id}}()
+      @context.app.router.url_helpers.{{name.id}}({{*args}})
     end
 
     private def response
@@ -54,8 +54,8 @@ module Startram
     end
 
     private def render(body = "", content_type = "text/html", status = 200)
-      response.body = body
-      response.status = status
+      response.body = body.to_s
+      response.status = status.to_i
       response.headers["Content-Type"] ||= content_type
     end
 

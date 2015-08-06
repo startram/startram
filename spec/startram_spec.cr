@@ -2,7 +2,7 @@ require "./spec_helper"
 
 class CarpetsController < Startram::Controller
   def index
-    redirect_to new_carpet_path
+    redirect_to edit_carpet_path("23")
   end
 end
 
@@ -37,7 +37,7 @@ module Startram
           response = app.call(request)
 
           response.status_code.should eq 302
-          response.headers["Location"].should eq "/carpets/new"
+          response.headers["Location"].should eq "/carpets/23/edit"
         end
       end
     end
