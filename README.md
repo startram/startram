@@ -1,13 +1,16 @@
-# startram
+# Startram
 
-TODO: Write a description here for library
+It's time to take the rails into space...
 
 ## Installation
 
-Add it to `Projectfile`
+Since crysta doesn't fetch dependencies of dependencies you'll have to add
+startrams dependencies on top of startram itself in your `Projectfile`.
 
 ```crystal
 deps do
+  github "spalger/crystal-mime"
+  github "dbackeus/activesupport.cr"
   github "dbackeus/startram"
 end
 ```
@@ -105,4 +108,4 @@ Run specs as usual with `crystal spec`.
 ## Contributors
 
 - [dbackeus](https://github.com/dbackeus) David Backeus - creator, maintainer
-- Various contributions borrowed from Rack and Amethyst projects
+- Various contributions borrowed from Rack, Rails and Amethyst projects
