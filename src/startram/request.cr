@@ -4,7 +4,7 @@ module Startram
   class Request
     getter path_params
 
-    def initialize(@request)
+    def initialize(@request : HTTP::Request)
       @path_params = {} of String => String
     end
 
