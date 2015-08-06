@@ -39,6 +39,12 @@ module Startram
       render body: view_instance.to_s
     end
 
+    macro method_missing(name, args, block)
+      {% raise "no way" unless name.id.stringify.ends_with?("path") %}
+
+      @context.app.router.url_helpers.{{name.id}}()
+    end
+
     private def response
       @context.response
     end

@@ -28,7 +28,7 @@ class StickersController < Startram::Controller
 
     sticker.save
 
-    redirect_to "/stickers"
+    redirect_to stickers_path
   end
 
   def update
@@ -36,13 +36,13 @@ class StickersController < Startram::Controller
 
     sticker.assign_attributes(sticker_params)
 
-    redirect_to "/stickers"
+    redirect_to sticker_path(params["id"])
   end
 
   def destroy
     Sticker.destroy(params["id"])
 
-    redirect_to "/stickers"
+    redirect_to stickers_path
   end
 
   private def sticker_params
