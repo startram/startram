@@ -12,8 +12,12 @@ module Startram
       FormBuilder.new(model)
     end
 
-    macro method_missing(name)
-      @controller.@{{name.id}}.not_nil!
+    macro method_missing(name, args, block)
+      {% if name.id.stringify.ends_with?("path") %}
+        @controller.{{name.id}}({{*args}})
+      {% else %}
+        @controller.@{{name.id}}.not_nil!
+      {% end %}
     end
 
     private def build(&block)
