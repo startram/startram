@@ -96,6 +96,25 @@ module Rack
       end
     end
 
+    describe ".parse_cookies" do
+      it "parses cookies" do
+        headers = {"Cookie" => "zoo=m"}
+        parse_cookies(headers).should eq({"zoo" => "m"})
+
+        headers = {"Cookie" => "foo=%"}
+        parse_cookies(headers).should eq({"foo" => "%"})
+
+        headers = {"Cookie" => "foo=bar;foo=car"}
+        parse_cookies(headers).should eq({"foo" => "bar"})
+
+        headers = {"Cookie" => "foo=bar;quux=h&m"}
+        parse_cookies(headers).should eq({"foo" => "bar", "quux" => "h&m"})
+
+        headers = {"Cookie" => "foo=bar"}
+        parse_cookies(headers).should eq({"foo" => "bar"})
+      end
+    end
+
     describe ".unescape" do
       it "escapes strings" do
         unescape("fo%3Co%3Ebar").should eq "fo<o>bar"

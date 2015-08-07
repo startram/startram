@@ -50,6 +50,10 @@ module Startram
       URI.parse(path).query
     end
 
+    def cookies : Hash(String, String)
+      @cookies ||= Rack::Utils.parse_cookies(headers)
+    end
+
     private def parse_parameters(string)
       Rack::Utils.parse_nested_query(string)
     end
