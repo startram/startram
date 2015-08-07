@@ -11,12 +11,15 @@
 - [x] Layouts
 - [x] Path helpers in controllers
 - [x] Path helpers in views
+- [x] Basic cookie based sessions
+- [x] In app middleware (check rake middleware in a rails app for inspiration)
+- [ ] Flash messages
+- [ ] Encrypted sessions with configurable key base
 - [ ] Persistance strategies for models
 - [ ] Default MongoDB persistance strategy
-- [ ] Cookie based encrypted sessions
-- [ ] Flash messages
 - [ ] Yield self for nicer app initialization
-- [ ] Routing in config file (requires app constant?)
+- [ ] App class level routing
+- [ ] App class level config (defaults < ENV < explicit constructor overrides)
 - [ ] ENV based configuration with dotenv
 - [ ] Front end handling (brunch?)
 - [ ] Static file digest + caching
@@ -34,3 +37,4 @@
 
 - [ ] CSRF protection with request token
 - [ ] Safe nested parameters (size/depth restriction like in Rack)
+- [ ] Default ecr escaping (impossible for the time being?)
