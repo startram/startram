@@ -4,7 +4,7 @@ It's time to take the rails into space...
 
 ## Installation
 
-Since crysta doesn't fetch dependencies of dependencies you'll have to add
+Since crystal doesn't fetch dependencies of dependencies you'll have to add
 startrams dependencies on top of startram itself in your `Projectfile`.
 
 ```crystal
