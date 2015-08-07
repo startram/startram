@@ -45,6 +45,10 @@ module Startram
       @context.app.router.url_helpers.{{name.id}}({{*args}})
     end
 
+    private def session
+      @context.session
+    end
+
     private def response
       @context.response
     end

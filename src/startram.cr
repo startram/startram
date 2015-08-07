@@ -19,7 +19,7 @@ module Startram
   class App < HTTP::Handler
     getter router
 
-    def initialize(@root = Dir.working_directory)
+    def initialize(@root = Dir.working_directory, @session_key = "_startram_session")
       @router = Router.new
     end
 
@@ -35,6 +35,7 @@ module Startram
     def app_handlers
       [
         Startram::Handlers::RequestMethodOverrideHandler.new
+        Startram::Handlers::SessionCookieHandler.new(@session_key)
         @router
       ]
     end

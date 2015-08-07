@@ -3,10 +3,12 @@ module Startram
     getter request
     getter app
     getter response
+    getter session
 
     def initialize(@request : Startram::Request, @app : App, @handlers = [] of Handler)
       @current_index = -1
       @response = Response.new(404)
+      @session = Session.new
     end
 
     def next

@@ -2,7 +2,7 @@ require "../../src/startram"
 
 require "./app/**"
 
-app = Startram::App.new(__DIR__)
+app = Startram::App.new(root: __DIR__, session_key: "_todo_session")
 
 app.router.draw do
   get "/todos", TodosController, :index
