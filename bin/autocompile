@@ -16,6 +16,19 @@ rescue LoadError
   exit 1
 end
 
+begin
+  require "terminal-notifier-guard"
+  @notify = true
+rescue LoadError
+  puts "Install terminal-notifier-guard to get notified of compilation status"
+end
+
+def notify(message, type: "success")
+  if @notify
+    TerminalNotifier::Guard.send(type, message)
+  end
+end
+
 @app_path = ARGV.first # ie. examples/something.cx
 @app_pid = nil
 
@@ -31,6 +44,7 @@ def spawn_crystal
     if build_success
       elapsed = Time.now - start_time
       puts "Compiled in #{elapsed.round(2)}sec\n\n"
+      notify "Recompiled!"
 
       Open3.popen3(target) do |stdin, stdout, stderr, thread|
         @app_pid = thread[:pid]
@@ -40,16 +54,18 @@ def spawn_crystal
       end
     else
       puts "Build failed, press any key to try again..."
+      notify "Compile failed!", type: "failed"
       $stdin.readline
     end
   end
 end
 
-dirs = Dir["src/**/"] + Dir["examples/**/"] + Dir["spec/**/"]
+dirs = ["./examples", "./src"]
 
 listener = Listen.to(*dirs) do |modified, added, removed|
   if @app_pid
     Process.kill("QUIT", @app_pid)
+    @app_pid = nil
   end
 end
 
