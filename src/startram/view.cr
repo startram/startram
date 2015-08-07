@@ -53,7 +53,7 @@ module Startram
     end
 
     private def resource_name
-      "#{@model.class.to_s.underscore}s" # TODO: actual pluralize
+      @model.class.to_s.tableize
     end
   end
 end
