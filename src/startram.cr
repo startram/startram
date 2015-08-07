@@ -25,13 +25,18 @@ module Startram
 
     def call(request)
       request = Request.new(request)
-      context = Context.new(request, self)
+      context = Context.new(request, self, app_handlers)
 
-      if route = router.match(request.params.fetch("_method", request.method), request.path)
-        route.call(context).to_http_response
-      else
-        HTTP::Response.not_found
-      end
+      context.next
+
+      context.response.to_http_response
+    end
+
+    def app_handlers
+      [
+        Startram::Handlers::RequestMethodOverrideHandler.new
+        @router
+      ]
     end
 
     def handlers

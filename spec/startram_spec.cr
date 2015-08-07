@@ -10,7 +10,10 @@ app = Startram::App.new
 
 app.router.draw do
   get "/test" do |context|
-    Startram::Response.new 200, "Lol"
+    response = context.response
+
+    response.status = 200
+    response.body = "Lol"
   end
 
   resources :carpets

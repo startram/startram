@@ -1,6 +1,6 @@
 module Startram
   class Route
-    def initialize(path, &block : Context -> Response)
+    def initialize(path, &block : Context ->)
       @path = path
       @named_parameters = Set(String).new
       @path_regex = compile(path)

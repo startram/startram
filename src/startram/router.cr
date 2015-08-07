@@ -20,12 +20,12 @@ module Startram
         add_route({{method}}, path, name, &block)
       end
 
-      def {{method.id.downcase}}(path, name = nil, &block : Context -> Response)
+      def {{method.id.downcase}}(path, name = nil, &block : Context ->)
         add_route({{method}}, path, name, &block)
       end
     {% end %}
 
-    def add_route(method, path, name, &block : Context -> Response)
+    def add_route(method, path, name, &block : Context ->)
       route = Route.new(path, &block)
       name = name || path.split("/").select { |s| !s.empty? }.join("_")
 
@@ -47,6 +47,14 @@ module Startram
       post resource_path, {{controller}}, :create, name: plural
       put "#{resource_path}/:id", {{controller}}, :update, name: singular
       delete "#{resource_path}/:id", {{controller}}, :destroy, name: singular
+    end
+
+    def call(context)
+      request = context.request
+
+      if route = match(request.method, request.path)
+        route.call(context)
+      end
     end
 
     def draw

@@ -3,9 +3,11 @@ require "../rack/utils"
 module Startram
   class Request
     getter path_params
+    property method
 
     def initialize(@request : HTTP::Request)
       @path_params = {} of String => String
+      @method = @request.method
     end
 
     forward_missing_to @request
