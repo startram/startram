@@ -1,0 +1,5 @@
+deps do
+  github "spalger/crystal-mime"
+  github "dbackeus/activesupport.cr"
+  github "dbackeus/startram"
+end

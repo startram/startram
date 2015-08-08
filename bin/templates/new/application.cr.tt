@@ -1,0 +1,12 @@
+require "startram"
+
+{{run "startram/run_commands/view_compiler", "#{__DIR__}/app/views"}}
+
+require "./app/**"
+
+app = Startram::App.new(root: "#{__DIR__}/..", session_key: "_<%= name.underscore %>_session")
+
+app.router.draw do
+end
+
+app.serve

@@ -1,0 +1,153 @@
+#!/usr/bin/env ruby
+
+require "thor"
+require "open3"
+require "active_support/core_ext/string"
+
+begin
+  require "terminal-notifier-guard"
+  $notify = true
+rescue LoadError
+  puts "Install terminal-notifier-guard to get notified of compilation status"
+end
+
+class Autorunner
+  def initialize
+    @app_pid = nil
+    @app_path = ".src/application.cr"
+  end
+
+  def run!
+    load_dependencies
+    listen_to_file_changes
+    spawn_crystal
+  end
+
+  private
+
+  def load_dependencies
+    begin
+      require "listen"
+    rescue LoadError
+      puts "Error: You need to gem install listen for autorun to work"
+      exit 1
+    end
+  end
+
+  def listen_to_file_changes
+    listener = Listen.to("./src") do |modified, added, removed|
+      if @app_pid
+        Process.kill("QUIT", @app_pid)
+        @app_pid = nil
+      end
+    end
+
+    listener.only /\.(cr|ecr)/
+    listener.start
+  end
+
+  def spawn_crystal
+    target = "tmp/compiled"
+    build_command = "crystal build -o #{target} #{@app_path}"
+
+    loop do
+      start_time = Time.now
+      puts "\nCompiling #{@app_path}"
+      build_success = system(build_command)
+
+      if build_success
+        elapsed = Time.now - start_time
+        puts "Compiled in #{elapsed.round(2)}sec\n\n"
+        notify "Recompiled!"
+
+        Open3.popen3(target) do |stdin, stdout, stderr, thread|
+          @app_pid = thread[:pid]
+          stdout.each do |line|
+            puts line
+          end
+        end
+      else
+        puts "Build failed, press any key to try again..."
+        notify "Compile failed!", type: "failed"
+        $stdin.readline
+      end
+    end
+  end
+
+  def notify(message, type: "success")
+    if $notify
+      TerminalNotifier::Guard.send(type, message)
+    end
+  end
+end
+
+class NewCommand < Thor::Group
+  include Thor::Actions
+
+  def self.source_root
+    "#{File.dirname(__FILE__)}/templates/new"
+  end
+
+  argument :name
+
+  def create_root
+    self.destination_root = name
+    puts "Destination: #{destination_root}"
+    Dir.mkdir(destination_root) unless File.exists?(destination_root)
+  end
+
+  def create_src
+    directory "src"
+    keep "src/app/models"
+    template "application.cr.tt", "src/application.cr"
+  end
+
+  def create_assets
+    directory "assets"
+    keep "assets/images"
+  end
+
+  def create_public
+    directory "public"
+  end
+
+  def create_spec
+    directory "spec"
+  end
+
+  def copy_root_files
+    copy_file ".gitignore"
+    template "README.md.tt", "README.md"
+    copy_file "Projectfile"
+    template "LICENSE"
+    copy_file "package.json"
+    copy_file "brunch-config.coffee"
+  end
+
+  def create_tmp
+    directory "tmp"
+    keep "tmp"
+  end
+
+  def create_bin
+    directory "bin"
+    chmod "bin/startram", 0755
+  end
+
+  private
+
+  def keep(destination)
+    create_file "#{destination}/.keep"
+  end
+end
+
+class StartramRunner < Thor
+  register NewCommand, "new", "new [NAME]", "creates a new startram app"
+
+  desc "autorun", "run your app and recompile on file changes"
+  def autorun
+    Autorunner.new.listen!
+  end
+end
+
+StartramRunner.start
