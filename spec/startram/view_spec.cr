@@ -13,11 +13,13 @@ class TestController < Startram::Controller
   end
 end
 
-app = Startram::App.new
-
-app.router.draw do
-  get "/test/:foo", TestController, :test, name: "test"
+class ViewTestApp < Startram::App
+  router.draw do
+    get "/test/:foo", TestController, :test, name: "test"
+  end
 end
+
+app = ViewTestApp.new
 
 module Startram
   describe View do

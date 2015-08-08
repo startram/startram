@@ -6,18 +6,39 @@ class CarpetsController < Startram::Controller
   end
 end
 
-app = Startram::App.new
+class ApplesController < Startram::Controller
 
-app.router.draw do
-  get "/test" do |context|
-    response = context.response
+end
 
-    response.status = 200
-    response.body = "Lol"
+class TestApp < Startram::App
+  router.draw do
+    get "/test" do |context|
+      response = context.response
+
+      response.status = 200
+      response.body = "Lol"
+    end
+
+    resources :carpets
+  end
+end
+
+class LolApp < Startram::App
+  router.draw do
+    get "/lol" do |context|
+      response = context.response
+
+      response.status = 201
+      response.body = "Lol :D"
+    end
+
+    resources :apples
   end
 
-  resources :carpets
 end
+
+app = TestApp.new
+app2 = LolApp.new
 
 module Startram
   describe App do
@@ -38,6 +59,15 @@ module Startram
           request = HTTP::Request.new("GET", "/carpets")
 
           response = app.call(request)
+
+          response.status_code.should eq 302
+          response.headers["Location"].should eq "/carpets/23/edit"
+        end
+
+        it "works with apples to" do
+          request = HTTP::Request.new("GET", "/apples")
+
+          response = app2.call(request)
 
           response.status_code.should eq 302
           response.headers["Location"].should eq "/carpets/23/edit"

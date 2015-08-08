@@ -15,10 +15,11 @@ module Startram
   end
 
   class App < HTTP::Handler
-    getter router
+    def self.router
+      @@router ||= Startram::Router.new
+    end
 
     def initialize(@root = Dir.working_directory, @session_key = "_startram_session")
-      @router = Router.new
     end
 
     def call(request)
@@ -66,6 +67,10 @@ module Startram
           "
         end
       end
+    end
+
+    def router
+      self.class.router
     end
   end
 end

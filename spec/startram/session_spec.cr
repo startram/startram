@@ -10,12 +10,14 @@ class SessionController < Startram::Controller
   end
 end
 
-app = Startram::App.new
-
-app.router.draw do
-  post "/session", SessionController, :create
-  get "/session", SessionController, :show
+class SessionTestApp < Startram::App
+  router.draw do
+    post "/session", SessionController, :create
+    get "/session", SessionController, :show
+  end
 end
+
+app = SessionTestApp.new
 
 module Startram
   describe Session do
