@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require "readline"
+
+tmp_console = "tmp/console.cr"
+
+File.delete(tmp_console) if File.exist?(tmp_console)
+
+while line = Readline.readline(">> ", true)
+  exit if line == "exit"
+
+  if File.exist?(tmp_console)
+    current = File.readlines(tmp_console)
+    current.last.gsub!(/\Aputs /, "")
+  end
+
+  File.open(tmp_console, "w") do |file|
+    file.write current.join("\n")+"\n" if current
+    file.write "puts #{line}"
+  end
+
+  output = `crystal #{tmp_console}`
+  puts "=> #{output}"
+end
