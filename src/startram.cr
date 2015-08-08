@@ -36,7 +36,7 @@ module Startram
       [
         Startram::Handlers::RequestMethodOverrideHandler.new
         Startram::Handlers::SessionCookieHandler.new(@session_key)
-        @router
+        router
       ]
     end
 
@@ -50,10 +50,24 @@ module Startram
     end
 
     def serve
+      add_default_routes if router.empty?
+
       port = ENV["PORT"]? || 7777
       server = HTTP::Server.new(port.to_i, handlers)
       Startram.log.info "Listening to http://localhost:#{port}"
       server.listen
+    end
+
+    private def add_default_routes
+      router.draw do
+        get "/" do |context|
+          context.response.status = 200
+          context.response.body = "
+            <h1>Welcome to startram.</h1>
+            <p>Better add your own routes to get rid of this screen...</p>
+          "
+        end
+      end
     end
   end
 end

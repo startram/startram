@@ -49,6 +49,10 @@ module Startram
       delete "#{resource_path}/:id", {{controller}}, :destroy, name: singular
     end
 
+    def empty?
+      @routes.values.all? &.empty?
+    end
+
     def call(context)
       request = context.request
 

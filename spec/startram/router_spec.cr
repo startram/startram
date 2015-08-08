@@ -7,20 +7,38 @@ module Startram
   describe Router do
     handler = -> (con : Context) { Response.new }
 
-    it "adds route helpers" do
-      router = Router.new
-
-      router.draw do
-        get "/awesome", &handler
-        get "/foo", name: "bar", &handler
-        get "/users/:id", name: "user", &handler
-        get "/deeply/:id/nested/:dynamic/:params", name: "deep", &handler
+    describe "#empty?" do
+      it "is true when no routes have been added" do
+        Router.new.empty?.should be_true
       end
 
-      router.url_helpers.awesome_path.should eq "/awesome"
-      router.url_helpers.bar_path.should eq "/foo"
-      router.url_helpers.user_path("23").should eq "/users/23"
-      router.url_helpers.deep_path("23", "foo", "bar").should eq "/deeply/23/nested/foo/bar"
+      it "is false after routes have been added" do
+        router = Router.new
+
+        router.draw do
+          get "/foo" {}
+        end
+
+        router.empty?.should be_false
+      end
+    end
+
+    describe "#draw" do
+      it "adds route helpers" do
+        router = Router.new
+
+        router.draw do
+          get "/awesome", &handler
+          get "/foo", name: "bar", &handler
+          get "/users/:id", name: "user", &handler
+          get "/deeply/:id/nested/:dynamic/:params", name: "deep", &handler
+        end
+
+        router.url_helpers.awesome_path.should eq "/awesome"
+        router.url_helpers.bar_path.should eq "/foo"
+        router.url_helpers.user_path("23").should eq "/users/23"
+        router.url_helpers.deep_path("23", "foo", "bar").should eq "/deeply/23/nested/foo/bar"
+      end
     end
 
     describe "#resources" do
