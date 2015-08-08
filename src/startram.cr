@@ -4,16 +4,14 @@ require "logger"
 require "./startram/**"
 
 module Startram
-  @@log = Logger.new(STDOUT).tap do |logger|
-    logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
-      io << message
-    end
-
-    logger.level = Logger::DEBUG
-  end
-
   def self.log
-    @@log
+    @@log ||= Logger.new(STDOUT).tap do |logger|
+      logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
+        io << message
+      end
+
+      logger.level = Logger::DEBUG
+    end
   end
 
   class App < HTTP::Handler
