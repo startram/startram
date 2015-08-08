@@ -32,7 +32,7 @@ puts %(require "ecr/macros")
 
 recursive_find(".ecr", view_dir).each do |file|
   underscored_name = file.gsub(view_dir, "").split("/").reject(&.empty?).join("_")
-  class_name = File.basename(underscored_name, ".ecr").camelcase
+  class_name = File.basename(underscored_name).split(".").first.camelcase
   puts %(
     class #{class_name}View < Startram::View
       ecr_file "#{file}"
