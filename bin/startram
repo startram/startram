@@ -14,7 +14,7 @@ end
 class Autorunner
   def initialize
     @app_pid = nil
-    @app_path = ".src/application.cr"
+    @app_path = "src/application.cr"
   end
 
   def run!
@@ -134,6 +134,24 @@ class NewCommand < Thor::Group
     chmod "bin/startram", 0755
   end
 
+  def install_dependencies
+    Dir.chdir destination_root do
+      puts "Installing crystal dependencies"
+      system "crystal deps"
+      puts "Installing npm dependencies"
+      system "npm install --loglevel warn"
+    end
+  end
+
+  def display_success_message
+    puts(
+      "",
+      "Your Startram is ready!",
+      "",
+      "launch with: cd #{name} && bin/startram autorun"
+    )
+  end
+
   private
 
   def keep(destination)
@@ -146,7 +164,7 @@ class StartramRunner < Thor
 
   desc "autorun", "run your app and recompile on file changes"
   def autorun
-    Autorunner.new.listen!
+    Autorunner.new.run!
   end
 end
 
