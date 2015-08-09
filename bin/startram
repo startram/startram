@@ -81,6 +81,50 @@ class Autorunner
   end
 end
 
+class GenerateControllerCommand < Thor::Group
+  include Thor::Actions
+
+  argument :name, type: :string
+  argument :actions, type: :array, default: [], banner: "action action"
+  attr_reader :current_action
+
+  def self.source_root
+    "#{File.dirname(__FILE__)}/templates/controller"
+  end
+
+  def create_controller
+    template "controller.cr.tt", "src/controllers/#{name.underscore}_controller.cr"
+    template "controller_spec.cr.tt", "spec/controllers/#{name.underscore}_spec.cr"
+  end
+
+  def create_templates
+    empty_directory "src/views/#{name.underscore}"
+
+    actions.each do |action|
+      @current_action = action.underscore
+      template "view.html.ecr.tt", "src/views/#{name.underscore}/#{current_action}.html.ecr"
+    end
+  end
+
+  def add_routes
+    actions.reverse_each do |action|
+      route %(get "/#{name.underscore}/#{action.underscore}", #{name.camelcase}Controller, :#{action.underscore})
+    end
+  end
+
+  private
+
+  def route(routing_code)
+    say_status :route, routing_code, :green
+
+    sentinel = /\.router\.draw do\s*\n/m
+
+    in_root do
+      inject_into_file "src/application.rb", "  #{routing_code}\n", { after: sentinel, verbose: false, force: true }
+    end
+  end
+end
+
 class NewCommand < Thor::Group
   include Thor::Actions
 
@@ -160,12 +204,39 @@ class NewCommand < Thor::Group
 end
 
 class StartramRunner < Thor
-  register NewCommand, "new", "new [NAME]", "creates a new startram app"
+  register NewCommand, "new", "new NAME", "creates a new startram app"
 
-  desc "autorun", "run your app and recompile on file changes"
-  def autorun
+  desc "server", "run your app server and recompile on file changes"
+  def server
     Autorunner.new.run!
+  end
+
+  desc "generate GENERATOR [args] [options]", "generate stuff"
+  def generate(generator)
+    puts "ERROR: Unknown generator #{generator}\n\n"
+    puts "Known generators"
+    puts "----------------"
+    puts KNOWN_GENERATORS
+    exit 1
   end
 end
 
-StartramRunner.start
+KNOWN_GENERATORS = %w[controller]
+
+command = ARGV.shift
+
+thor_class = case command
+when "new"
+  NewCommand.start
+when "generate"
+  case generator = ARGV.shift
+  when nil
+    StartramRunner.start([command]+ARGV)
+  when *KNOWN_GENERATORS
+    GenerateControllerCommand.start(ARGV)
+  else
+    StartramRunner.start([command, generator]+ARGV)
+  end
+else
+  StartramRunner.start
+end

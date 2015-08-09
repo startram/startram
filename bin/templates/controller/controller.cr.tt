@@ -1,0 +1,7 @@
+class <%= name.camelcase %>Controller < ApplicationController
+  <%- actions.each do |action| -%>
+  def <%= action %>
+    view :<%= action %>
+  end
+  <%- end -%>
+end

@@ -1,0 +1,5 @@
+require "../spec_helper"
+
+describe <%= name.camelcase %>Controller do
+
+end
