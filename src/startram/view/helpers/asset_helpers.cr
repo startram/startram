@@ -44,6 +44,10 @@ module Startram
 
         tags.to_s
       end
+
+      def image_tag(source)
+        %(<img src="#{asset_path(source, :image)}">)
+      end
     end
   end
 end
