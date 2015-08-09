@@ -1,3 +1,3 @@
 #!/usr/bin/env ruby
 
-exec ".deps/dbackeus-startram/bin/startram"
+load ".deps/dbackeus-startram/bin/startram"
