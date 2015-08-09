@@ -15,6 +15,7 @@
 - [x] In app middleware (check rake middleware in a rails app for inspiration)
 - [ ] Flash messages
 - [ ] Encrypted sessions with configurable key base
+- [ ] Port loads of rails helpers
 - [ ] Persistance strategies for models
 - [ ] Default MongoDB persistance strategy
 - [ ] Yield self for nicer app initialization
@@ -31,6 +32,7 @@
 - [ ] Directory conventions
 - [ ] Testing
 - [ ] Generators
+- [ ] Heroku buildpack and documentation
 - [ ] Built in jsonapi.org style api support?
 
 ## Security
