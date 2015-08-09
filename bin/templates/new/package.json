@@ -3,10 +3,11 @@
   "dependencies": {
     "bower": "^1.4.1",
     "brunch": "^1.8.1",
-    "clean-css-brunch": ">= 1.0 < 1.8",
-    "css-brunch": ">= 1.0 < 1.8",
-    "javascript-brunch": ">= 1.0 < 1.8",
+    "clean-css-brunch": "^1.7.2",
+    "coffee-script-brunch": "^1.8.2",
+    "css-brunch": "^1.7.0",
+    "javascript-brunch": "^1.7.1",
     "sass-brunch": "^1.8.10",
-    "uglify-js-brunch": ">= 1.0 < 1.8"
+    "uglify-js-brunch": "^1.7.8"
   }
 }

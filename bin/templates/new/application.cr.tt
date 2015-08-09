@@ -1,8 +1,8 @@
 require "startram"
 
-{{run "startram/run_commands/view_compiler", "#{__DIR__}/app/views"}}
+{{run "startram/run_commands/view_compiler", "#{__DIR__}/views"}}
 
-require "./app/**"
+require "./**"
 
 app = Startram::App.new(root: "#{__DIR__}/..", session_key: "_<%= name.underscore %>_session")
 

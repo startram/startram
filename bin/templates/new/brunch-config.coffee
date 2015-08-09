@@ -1,4 +1,4 @@
-// See http://brunch.io/#documentation for docs
+# See http://brunch.io/#documentation for docs
 
 exports.config =
   files:

@@ -120,7 +120,7 @@ class GenerateControllerCommand < Thor::Group
     sentinel = /\.router\.draw do\s*\n/m
 
     in_root do
-      inject_into_file "src/application.rb", "  #{routing_code}\n", { after: sentinel, verbose: false, force: true }
+      inject_into_file "src/application.cr", "  #{routing_code}\n", { after: sentinel, verbose: false, force: true }
     end
   end
 end
@@ -132,17 +132,18 @@ class NewCommand < Thor::Group
     "#{File.dirname(__FILE__)}/templates/new"
   end
 
-  argument :name
+  argument :name, type: :string
+  argument :path, type: :string, default: ""
 
   def create_root
-    self.destination_root = name
+    self.destination_root = "#{path}#{name}"
     puts "Destination: #{destination_root}"
     Dir.mkdir(destination_root) unless File.exists?(destination_root)
   end
 
   def create_src
     directory "src"
-    keep "src/app/models"
+    keep "src/models"
     template "application.cr.tt", "src/application.cr"
   end
 
@@ -157,6 +158,7 @@ class NewCommand < Thor::Group
 
   def create_spec
     directory "spec"
+    keep "spec/models"
   end
 
   def copy_root_files
@@ -180,19 +182,22 @@ class NewCommand < Thor::Group
 
   def install_dependencies
     Dir.chdir destination_root do
-      puts "Installing crystal dependencies"
+      puts "\nInstalling crystal dependencies"
+      puts "==============================="
       system "crystal deps"
-      puts "Installing npm dependencies"
+      puts "\nInstalling npm dependencies"
+      puts "==========================="
       system "npm install --loglevel warn"
     end
   end
 
   def display_success_message
     puts(
-      "",
+      "\nCongratulations!",
+      "================",
       "Your Startram is ready!",
       "",
-      "launch with: cd #{name} && bin/startram autorun"
+      "launch with: cd #{path}#{name} && bin/startram server"
     )
   end
 
@@ -208,7 +213,6 @@ class StartramRunner < Thor
 
   desc "server", "run your app server and recompile on file changes"
   def server
-    Autorunner.new.run!
   end
 
   desc "generate GENERATOR [args] [options]", "generate stuff"
@@ -228,6 +232,8 @@ command = ARGV.shift
 thor_class = case command
 when "new"
   NewCommand.start
+when "server"
+  Autorunner.new.run!
 when "generate"
   case generator = ARGV.shift
   when nil
@@ -238,5 +244,5 @@ when "generate"
     StartramRunner.start([command, generator]+ARGV)
   end
 else
-  StartramRunner.start
+  StartramRunner.start(ARGV)
 end
