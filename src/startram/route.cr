@@ -10,6 +10,10 @@ module Startram
     def path(*args)
       path = @path
 
+      args = args.to_a
+
+      hash = args.pop as Hash if args.last.is_a?(Hash)
+
       if args.length != @named_parameters.length
         raise ArgumentError.new("Expected arguments for :#{@named_parameters.join(", :")}, got: #{args}")
       end
@@ -17,6 +21,8 @@ module Startram
       @named_parameters.each_with_index do |name, index|
         path = path.gsub(":#{name}", args[index])
       end
+
+      path = "#{path}?#{Rack::Utils.build_query(hash)}" if hash
 
       path
     end

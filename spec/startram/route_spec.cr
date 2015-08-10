@@ -13,10 +13,18 @@ module Startram
     end
 
     describe "#path" do
-      it "raises error on argument mismatch" do
-        route = Route.new("/nested/:foo/:bar") { |request| Response.new }
+      route = Route.new("/nested/:foo/:bar") {}
 
-        message = %(Expected arguments for :foo, :bar, got: {"one"})
+      it "returns the path interpolated with arguments" do
+        route.path("lol", "what").should eq "/nested/lol/what"
+      end
+
+      it "makes a query string if last argument is a hash" do
+        route.path("a", "b", {"foo" => "bar", "quz" => "qux"}).should eq "/nested/a/b?foo=bar&quz=qux"
+      end
+
+      it "raises error on argument mismatch" do
+        message = %(Expected arguments for :foo, :bar, got: ["one"])
 
         expect_raises ArgumentError, message do
           route.path("one")

@@ -3,6 +3,23 @@ require "../../src/rack/utils"
 
 module Rack
   module Utils
+    describe ".build_query" do
+      it "builds query strings correctly" do
+        build_query({"foo" => "bar"}).should eq "foo=bar"
+        build_query({"foo" => "1", "bar" => "2"}).should eq "foo=1&bar=2"
+        build_query({"foo" => ["bar", "quux"]}).should eq "foo=bar&foo=quux"
+        build_query({"my weird field" => "q1!2\"'w$5&7/z8)?"}).should eq(
+          "my+weird+field=q1%212%22%27w%245%267%2Fz8%29%3F"
+        )
+      end
+
+      it "build query strings without = with non-existent values" do
+        key = "post/2011/08/27/Deux-%22rat%C3%A9s%22-de-l-Universit"
+        key = Rack::Utils.unescape(key)
+        build_query({key => nil}).should eq Rack::Utils.escape(key)
+      end
+    end
+
     describe ".parse_query" do
       it "parses query strings correctly" do
         parse_query("foo=bar").should eq({ "foo" => "bar" })
