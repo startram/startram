@@ -117,10 +117,10 @@ class GenerateControllerCommand < Thor::Group
   def route(routing_code)
     say_status :route, routing_code, :green
 
-    sentinel = /\.router\.draw do\s*\n/m
+    sentinel = /\.routes do\s*\n/m
 
     in_root do
-      inject_into_file "src/application.cr", "  #{routing_code}\n", { after: sentinel, verbose: false, force: true }
+      inject_into_file "src/routes.cr", "  #{routing_code}\n", { after: sentinel, verbose: false, force: true }
     end
   end
 end
@@ -145,6 +145,7 @@ class NewCommand < Thor::Group
     directory "src"
     keep "src/models"
     template "application.cr.tt", "src/application.cr"
+    template "routes.cr.tt", "src/routes.cr"
   end
 
   def create_assets

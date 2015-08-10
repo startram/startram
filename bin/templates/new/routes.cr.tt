@@ -1,0 +1,7 @@
+<%= name.camelcase %>.routes do
+  # Define single routes to controller and action:
+  # get "/path/:param", YourController, :controller_action
+
+  # Define restful resource routes (same behaviour as Rails etc):
+  # resources :users
+end

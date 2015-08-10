@@ -2,11 +2,13 @@ require "startram"
 
 {{run "startram/run_commands/view_compiler", "#{__DIR__}/views"}}
 
+class <%= name.camelcase %> < Startram::App
+end
+
+require "./models/**"
+require "./controllers/**"
 require "./**"
 
-app = Startram::App.new(root: "#{__DIR__}/..", session_key: "_<%= name.underscore %>_session")
-
-app.router.draw do
-end
+app = <%= name.camelcase %>.new(root: "#{__DIR__}/..", session_key: "_<%= name.underscore %>_session")
 
 app.serve
