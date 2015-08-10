@@ -42,6 +42,7 @@ module Startram
       @app_handlers ||= [
         Startram::Handlers::RequestMethodOverrideHandler.new
         Startram::Handlers::SessionCookieHandler.new(@session_key)
+        Startram::Handlers::FlashHandler.new
         router
       ]
     end

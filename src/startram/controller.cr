@@ -48,6 +48,7 @@ module Startram
     delegate session, @context
     delegate response, @context
     delegate request, @context
+    delegate flash, @context
 
     private def render(body = "", content_type = "text/html", status = 200)
       response.body = body.to_s

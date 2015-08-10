@@ -4,11 +4,13 @@ module Startram
     getter app
     getter response
     getter session
+    getter flash
 
     def initialize(@request : Startram::Request, @app : App, @handlers = [] of Handler)
       @current_index = -1
       @response = Response.new(404)
       @session = Session.new
+      @flash = Flash.new
     end
 
     def next
