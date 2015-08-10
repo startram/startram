@@ -1,4 +1,6 @@
 class StickersController < Startram::Controller
+  layout "application"
+
   def index
     @stickers = Sticker.all
 
@@ -28,6 +30,8 @@ class StickersController < Startram::Controller
 
     sticker.save
 
+    flash["success"] = "Sticker created!"
+
     redirect_to stickers_path
   end
 
@@ -36,11 +40,15 @@ class StickersController < Startram::Controller
 
     sticker.assign_attributes(sticker_params)
 
+    flash["success"] = "Sticker updated!"
+
     redirect_to sticker_path(params["id"])
   end
 
   def destroy
     Sticker.destroy(params["id"])
+
+    flash["success"] = "Sticker destroyed!"
 
     redirect_to stickers_path
   end

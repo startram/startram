@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<title>Welcome to Startram!</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+
+  .alert {
+    padding: 20px;
+  }
+
+  .alert-success {
+    background: #dff0d8;
+  }
+
+  .alert-info {
+    background: #d9edf7;
+  }
+
+  .alert-warning {
+    background: #fcf8e3;
+  }
+
+  .alert-danger {
+    background: #f2dede;
+  }
+</style>
+
+<% flash.each do |type, message| %>
+  <div class="alert alert-<%= type %>"><%= message %></div>
+<% end %>
+
+<%= content %>

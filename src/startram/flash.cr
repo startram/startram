@@ -32,5 +32,7 @@ module Startram
     def []?(key)
       @current[key]?
     end
+
+    forward_missing_to @current
   end
 end

@@ -10,6 +10,8 @@ module Startram
     def initialize(@controller, @content = nil)
     end
 
+    delegate flash, @controller
+
     macro method_missing(name, args, block)
       {% if name.id.stringify.ends_with?("path") %}
         @controller.{{name.id}}({{*args}})

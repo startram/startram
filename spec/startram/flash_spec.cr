@@ -25,13 +25,6 @@ module Startram
           "PUT", "/session", HTTP::Headers{"Cookie" => "_startram_session=flash.notice%3DThis"}
         )
 
-        response = app.call(request)
-
-        response.body.should eq "notice: This, error: "
-
-        response.headers.get("Set-Cookie").should eq [
-          "_startram_session=flash.notice%3DHello&flash.error%3DOhno; path=/; HttpOnly"
-        ]
       end
     end
   end
