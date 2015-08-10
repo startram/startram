@@ -45,17 +45,9 @@ module Startram
       @context.app.router.url_helpers.{{name.id}}({{*args}})
     end
 
-    private def session
-      @context.session
-    end
-
-    private def response
-      @context.response
-    end
-
-    private def request
-      @context.request
-    end
+    delegate session, @context
+    delegate response, @context
+    delegate request, @context
 
     private def render(body = "", content_type = "text/html", status = 200)
       response.body = body.to_s
