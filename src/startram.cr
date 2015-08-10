@@ -39,7 +39,7 @@ module Startram
     end
 
     def app_handlers
-      [
+      @app_handlers ||= [
         Startram::Handlers::RequestMethodOverrideHandler.new
         Startram::Handlers::SessionCookieHandler.new(@session_key)
         router
