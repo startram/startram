@@ -3,6 +3,7 @@ require "../spec_helper"
 class SessionController < Startram::Controller
   def create
     session["user_id"] = "23"
+    session["flash"] = "hello!"
   end
 
   def show
@@ -21,22 +22,44 @@ app = SessionTestApp.new
 
 module Startram
   describe Session do
-    it "sets a session cookie" do
-      request = HTTP::Request.new("POST", "/session")
+    describe "#deserialize!" do
+      session = Session.new
 
-      response = app.call(request)
+      session.deserialize! "user_id=23&foo=bar"
 
-      response.headers.get("Set-Cookie").should eq ["_startram_session=user_id%3D23; path=/; HttpOnly"]
+      session["user_id"].should eq "23"
+      session["foo"].should eq "bar"
     end
 
-    it "reads a session cookie" do
-      request = HTTP::Request.new(
-        "GET", "/session", HTTP::Headers{"Cookie" => "_startram_session=user_id%3D23"}
-      )
+    describe "#serialize" do
+      session = Session.new
 
-      response = app.call(request)
+      session["foo"] = "bar"
+      session["asdf"] = "qwer"
 
-      response.body.should eq "23"
+      session.serialize.should eq ["foo=bar", "asdf=qwer"]
+    end
+
+    context "integrated in the request lifecycle" do
+      it "sets a session cookie" do
+        request = HTTP::Request.new("POST", "/session")
+
+        response = app.call(request)
+
+        response.headers.get("Set-Cookie").should eq [
+          "_startram_session=user_id%3D23&flash%3Dhello%21; path=/; HttpOnly"
+        ]
+      end
+
+      it "reads a session cookie" do
+        request = HTTP::Request.new(
+          "GET", "/session", HTTP::Headers{"Cookie" => "_startram_session=user_id%3D23"}
+        )
+
+        response = app.call(request)
+
+        response.body.should eq "23"
+      end
     end
   end
 end
