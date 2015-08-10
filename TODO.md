@@ -15,13 +15,12 @@
 - [x] In app middleware (check rake middleware in a rails app for inspiration)
 - [x] Front end handling (brunch?)
 - [x] App class level routing
-- [ ] Hash argument in url helpers to generate query string suffix
-- [ ] Flash messages
+- [x] Flash messages
+- [x] Hash argument in url helpers to generate query string suffix
 - [ ] Encrypted sessions with configurable key base
 - [ ] Port loads of rails helpers
 - [ ] Persistance strategies for models
 - [ ] Default MongoDB persistance strategy
-- [ ] Yield self for nicer app initialization
 - [ ] App class level config (defaults < ENV < explicit constructor overrides)
 - [ ] ENV based configuration with dotenv
 - [ ] Static file digest + caching
@@ -36,6 +35,7 @@
 - [ ] Auto browser reload
 - [ ] Heroku buildpack and documentation
 - [ ] Built in jsonapi.org style api support?
+- [ ] startram-cli as proper ruby-gem
 
 ## Security
 
