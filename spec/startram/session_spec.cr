@@ -11,7 +11,7 @@ class SessionController < Startram::Controller
 end
 
 class SessionTestApp < Startram::App
-  router.draw do
+  routes do
     post "/session", SessionController, :create
     get "/session", SessionController, :show
   end

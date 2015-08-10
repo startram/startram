@@ -81,11 +81,13 @@ class UsersController < Startram::Controller
   end
 end
 
-app = Startram::App.new(root = __DIR__)
-
-app.router.draw do
-  resources :users
+class MyApp < Startram::App
+  routes do
+    resources :users
+  end
 end
+
+app = Startram::App.new(root: __DIR__)
 
 app.serve
 

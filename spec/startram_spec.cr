@@ -6,12 +6,8 @@ class CarpetsController < Startram::Controller
   end
 end
 
-class ApplesController < Startram::Controller
-
-end
-
 class TestApp < Startram::App
-  router.draw do
+  routes do
     get "/test" do |context|
       response = context.response
 
@@ -23,22 +19,18 @@ class TestApp < Startram::App
   end
 end
 
-class LolApp < Startram::App
-  router.draw do
-    get "/lol" do |context|
+class TestApp2 < Startram::App
+  routes do
+    get "/test" do |context|
       response = context.response
 
       response.status = 201
-      response.body = "Lol :D"
     end
-
-    resources :apples
   end
-
 end
 
 app = TestApp.new
-app2 = LolApp.new
+app2 = TestApp2.new
 
 module Startram
   describe App do
@@ -63,14 +55,16 @@ module Startram
           response.status_code.should eq 302
           response.headers["Location"].should eq "/carpets/23/edit"
         end
+      end
 
-        it "works with apples to" do
-          request = HTTP::Request.new("GET", "/apples")
+      # Testing multi app to make sure the class based routes don't collide
+      context "with a second app" do
+        it "works too" do
+          request = HTTP::Request.new("GET", "/test")
 
           response = app2.call(request)
 
-          response.status_code.should eq 302
-          response.headers["Location"].should eq "/carpets/23/edit"
+          response.status_code.should eq 201
         end
       end
     end

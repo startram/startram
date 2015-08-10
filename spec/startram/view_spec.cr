@@ -14,7 +14,7 @@ class TestController < Startram::Controller
 end
 
 class ViewTestApp < Startram::App
-  router.draw do
+  routes do
     get "/test/:foo", TestController, :test, name: "test"
   end
 end
