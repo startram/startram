@@ -14,6 +14,7 @@
 - [x] Basic cookie based sessions
 - [x] In app middleware (check rake middleware in a rails app for inspiration)
 - [x] Front end handling (brunch?)
+- [x] App class level routing
 - [ ] Hash argument in url helpers to generate query string suffix
 - [ ] Flash messages
 - [ ] Encrypted sessions with configurable key base
@@ -21,7 +22,6 @@
 - [ ] Persistance strategies for models
 - [ ] Default MongoDB persistance strategy
 - [ ] Yield self for nicer app initialization
-- [ ] App class level routing
 - [ ] App class level config (defaults < ENV < explicit constructor overrides)
 - [ ] ENV based configuration with dotenv
 - [ ] Static file digest + caching
