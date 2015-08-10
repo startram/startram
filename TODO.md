@@ -13,6 +13,8 @@
 - [x] Path helpers in views
 - [x] Basic cookie based sessions
 - [x] In app middleware (check rake middleware in a rails app for inspiration)
+- [x] Front end handling (brunch?)
+- [ ] Hash argument in url helpers to generate query string suffix
 - [ ] Flash messages
 - [ ] Encrypted sessions with configurable key base
 - [ ] Port loads of rails helpers
@@ -22,7 +24,6 @@
 - [ ] App class level routing
 - [ ] App class level config (defaults < ENV < explicit constructor overrides)
 - [ ] ENV based configuration with dotenv
-- [ ] Front end handling (brunch?)
 - [ ] Static file digest + caching
 - [ ] README.md
 - [ ] Automatic rendering of unprocessed controller actions?
@@ -32,6 +33,7 @@
 - [ ] Directory conventions
 - [ ] Testing
 - [ ] Generators
+- [ ] Auto browser reload
 - [ ] Heroku buildpack and documentation
 - [ ] Built in jsonapi.org style api support?
 
