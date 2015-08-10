@@ -21,6 +21,10 @@ module Startram
       end
     end
 
+    def now
+      @current
+    end
+
     def []=(key, value)
       @next[key] = value
     end
