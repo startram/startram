@@ -15,7 +15,7 @@ module Startram
       end
     end
 
-    def update_session(session : Session)
+    def update_session!(session : Session)
       @next.each do |key, value|
         session["flash.#{key}"] = value
       end

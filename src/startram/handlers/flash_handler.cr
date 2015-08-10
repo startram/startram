@@ -4,6 +4,6 @@ class Startram::Handlers::FlashHandler
 
     context.next
 
-    context.flash.update_session(context.session)
+    context.flash.update_session!(context.session)
   end
 end
