@@ -4,10 +4,17 @@ require "../../src/startram"
 
 require "./app/**"
 
-app = Startram::App.new(root: __DIR__, session_key: "_restful_session")
+class Restful < Startram::App
+  routes do
+    get "/" do |context|
+      context.response.status = 302
+      context.response["Location"] = "/stickers"
+    end
 
-app.router.draw do
-  resources :stickers
+    resources :stickers
+  end
 end
+
+app = Restful.new(root: __DIR__, session_key: "_restful_session")
 
 app.serve

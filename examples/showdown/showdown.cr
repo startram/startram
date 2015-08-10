@@ -6,10 +6,10 @@ require "./app/**"
 
 Startram.log.level = Logger::WARN
 
-app = Startram::App.new
-
-app.router.draw do
-  get "/:title", PagesController, :index
+class Showdown < Startram::App
+  routes do
+    get "/:title", PagesController, :index
+  end
 end
 
-app.serve
+Showdown.new.serve

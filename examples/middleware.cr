@@ -11,14 +11,15 @@ class Middleware < HTTP::Handler
   end
 end
 
-app = Startram::App.new
-
-app.router.draw do
-  get "/" do
-    Startram::Response.new body: "Ready for take off..."
+class HelloWorld < Startram::App
+  routes do
+    get "/" do |context|
+      context.response.status = 200
+      context.response.body = "Ready for take off..."
+    end
   end
 end
 
-server = HTTP::Server.new(7777, [Middleware.new, app])
+server = HTTP::Server.new(7777, [Middleware.new, HelloWorld.new])
 Startram.log.info "Listening to http://localhost:7777"
 server.listen
