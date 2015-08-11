@@ -1,6 +1,6 @@
 module Startram
   module Model
-    alias Values = String | Int32 | Int64 | Nil | Time | Bool
+    alias Values = String | Int32 | Int64 | Float32 | Float64 | Nil | Time | Bool
     alias Attributes = Hash(String, Values)
 
     class FieldData
@@ -75,12 +75,18 @@ module Startram
       case type
       when :String
         value.to_s
-      when :Int32, :Int64
-        value.to_s.to_i
+      when :Int32
+        value.to_s.to_i32
+      when :Int64
+        value.to_s.to_i64
       when :Time
         value.is_a?(Time) ? value : Time.parse(value.to_s, "%FT%X.%L%z")
       when :Bool
         TRUTHY.includes?(value.to_s)
+      when :Float32
+        value.to_s.to_f32
+      when :Float64
+        value.to_s.to_f64
       end
     end
   end

@@ -6,6 +6,7 @@ class TestModel
   field :id, Int32
   field :name, String
   field :age, Int32
+  field :height, Float64
   field :poked_at, Time, default: -> { Time.at(108) }
   field :happy, Bool, default: true
 end
@@ -53,6 +54,12 @@ module Startram
         end
       end
 
+      it "casts float" do
+        model.height = "23.4"
+
+        model.height.should eq 23.4
+      end
+
       describe "default argument" do
         it "gets used as default value" do
           TestModel.new.happy.should be_true
@@ -67,6 +74,12 @@ module Startram
 
           model.happy.should be_nil
           model.poked_at.should be_nil
+        end
+
+        it "boolean default true gets overridden by false" do
+          model = TestModel.new({"happy" => false})
+
+          model.happy.should be_false
         end
       end
 
@@ -87,7 +100,7 @@ module Startram
 
     describe "#fields" do
       it "returns the model fields and data" do
-        model.fields.keys.should eq([:id, :name, :age, :poked_at, :happy])
+        model.fields.keys.should eq([:id, :name, :age, :height, :poked_at, :happy])
         model.fields.values.first.type.should eq :Int32
       end
     end
