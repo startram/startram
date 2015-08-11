@@ -31,6 +31,7 @@ module Startram
       @@config ||= {
         "root" => Dir.working_directory
         "session_key" => "_startram_session"
+        "secret_key_base" => ""
       }
     end
 
@@ -54,7 +55,7 @@ module Startram
     def app_handlers
       @app_handlers ||= [
         Startram::Handlers::RequestMethodOverrideHandler.new
-        Startram::Handlers::SessionCookieHandler.new(config["session_key"])
+        Startram::Handlers::SessionCookieHandler.new(config["session_key"], config["secret_key_base"])
         Startram::Handlers::FlashHandler.new
         router
       ]

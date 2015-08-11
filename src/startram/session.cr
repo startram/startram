@@ -16,7 +16,7 @@ module Startram
     def serialize
       @store.map do |key, value|
         "#{key}=#{value}"
-      end
+      end.join('&')
     end
 
     forward_missing_to @store

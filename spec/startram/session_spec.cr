@@ -19,6 +19,7 @@ class SessionTestApp < Startram::App
 
   configure({
     "session_key" => "_my_test_session"
+    "secret_key_base" => "ew234kjc6b213134b07509e19c49c53374f7fcf478cb25cdaa6b479f2eb1259b8df7858d4"
   })
 end
 
@@ -41,7 +42,7 @@ module Startram
       session["foo"] = "bar"
       session["asdf"] = "qwer"
 
-      session.serialize.should eq ["foo=bar", "asdf=qwer"]
+      session.serialize.should eq "foo=bar&asdf=qwer"
     end
 
     context "integrated in the request lifecycle" do
@@ -51,14 +52,14 @@ module Startram
         response = app.call(request)
 
         response.headers.get("Set-Cookie").should eq [
-          "_my_test_session=user_id%3D23&flash%3Dhello%21; path=/; HttpOnly"
+          "_my_test_session=user_id%3D23%26flash%3Dhello%21--cd3d95db554fcc3474204bc7af800ba742dbfad8; path=/; HttpOnly"
         ]
       end
 
       it "reads a session cookie" do
-        request = HTTP::Request.new(
-          "GET", "/session", HTTP::Headers{"Cookie" => "_my_test_session=user_id%3D23"}
-        )
+        request = HTTP::Request.new("GET", "/session", HTTP::Headers{
+          "Cookie" => "_my_test_session=user_id%3D23--8f3848fefb2ec3a70ea9d554f1694997b1b0d738"
+        })
 
         response = app.call(request)
 

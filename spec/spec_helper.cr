@@ -1,7 +1,7 @@
 require "spec"
 require "../src/startram"
 
-Startram.log.level = Logger::WARN
+Startram.log.level = Logger::FATAL
 
 def build_request(method, path, body = "Test", headers = HTTP::Headers.new)
   base_request = HTTP::Request.new(method, path, headers, body)
