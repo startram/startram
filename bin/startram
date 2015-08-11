@@ -20,6 +20,7 @@ class Autorunner
   def run!
     load_dependencies
     listen_to_file_changes
+    spawn_brunch
     spawn_crystal
   end
 
@@ -44,6 +45,12 @@ class Autorunner
 
     listener.only /\.(cr|ecr)/
     listener.start
+  end
+
+  def spawn_brunch
+    Thread.new do
+      system "brunch watch"
+    end
   end
 
   def spawn_crystal
@@ -189,6 +196,15 @@ class NewCommand < Thor::Group
       puts "\nInstalling npm dependencies"
       puts "==========================="
       system "npm install --loglevel warn"
+    end
+  end
+
+  def git_init
+    puts "\nGit Init"
+    puts "========"
+
+    in_root do
+      system "git init"
     end
   end
 
