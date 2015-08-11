@@ -1,4 +1,4 @@
 deps do
   github "spalger/crystal-mime"
-  github "dbackeus/activesupport.cr"
+  github "startram/activesupport.cr"
 end
