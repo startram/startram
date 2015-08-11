@@ -13,6 +13,9 @@ class VariousThings < Startram::App
   end
 end
 
-app = VariousThings.new(root: __DIR__, session_key: "_todo_session")
+app = VariousThings.new({
+  "root" => __DIR__
+  "session_key" => "_todo_session"
+})
 
 app.serve

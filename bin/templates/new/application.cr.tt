@@ -3,12 +3,16 @@ require "startram"
 {{run "startram/run_commands/view_compiler", "#{__DIR__}/views"}}
 
 class <%= name.camelcase %> < Startram::App
+  configure({
+  "root" => "#{__DIR__}/.."
+  "session_key" => "_<%= name.underscore %>_session"
+})
 end
 
 require "./models/**"
 require "./controllers/**"
 require "./**"
 
-app = <%= name.camelcase %>.new(root: "#{__DIR__}/..", session_key: "_<%= name.underscore %>_session")
+app = <%= name.camelcase %>.new
 
 app.serve

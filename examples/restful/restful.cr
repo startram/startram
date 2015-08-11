@@ -15,6 +15,9 @@ class Restful < Startram::App
   end
 end
 
-app = Restful.new(root: __DIR__, session_key: "_restful_session")
+app = Restful.new({
+  "root" => __DIR__
+  "session_key" => "_restful_session"
+})
 
 app.serve

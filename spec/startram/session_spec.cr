@@ -16,6 +16,10 @@ class SessionTestApp < Startram::App
     post "/session", SessionController, :create
     get "/session", SessionController, :show
   end
+
+  configure({
+    "session_key" => "_my_test_session"
+  })
 end
 
 app = SessionTestApp.new
@@ -47,13 +51,13 @@ module Startram
         response = app.call(request)
 
         response.headers.get("Set-Cookie").should eq [
-          "_startram_session=user_id%3D23&flash%3Dhello%21; path=/; HttpOnly"
+          "_my_test_session=user_id%3D23&flash%3Dhello%21; path=/; HttpOnly"
         ]
       end
 
       it "reads a session cookie" do
         request = HTTP::Request.new(
-          "GET", "/session", HTTP::Headers{"Cookie" => "_startram_session=user_id%3D23"}
+          "GET", "/session", HTTP::Headers{"Cookie" => "_my_test_session=user_id%3D23"}
         )
 
         response = app.call(request)

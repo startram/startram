@@ -23,10 +23,23 @@ module Startram
       with router yield
     end
 
-    getter :router
+    def self.configure(additional_config : Hash(String, String))
+      config.merge! additional_config
+    end
 
-    def initialize(@root = Dir.working_directory, @session_key = "_startram_session")
+    def self.config
+      @@config ||= {
+        "root" => Dir.working_directory
+        "session_key" => "_startram_session"
+      }
+    end
+
+    getter :router
+    getter :config
+
+    def initialize(config = {} of String => String)
       @router = self.class.router
+      @config = self.class.config.merge(config)
     end
 
     def call(request)
@@ -41,7 +54,7 @@ module Startram
     def app_handlers
       @app_handlers ||= [
         Startram::Handlers::RequestMethodOverrideHandler.new
-        Startram::Handlers::SessionCookieHandler.new(@session_key)
+        Startram::Handlers::SessionCookieHandler.new(config["session_key"])
         Startram::Handlers::FlashHandler.new
         router
       ]
@@ -50,7 +63,7 @@ module Startram
     def handlers
       [
         HTTP::ErrorHandler.new
-        Startram::Handlers::StaticFileHandler.new("#{@root}/public")
+        Startram::Handlers::StaticFileHandler.new("#{config["root"]}/public")
         Startram::Handlers::RequestLogHandler.new
         self
       ]
