@@ -17,7 +17,7 @@
 - [x] App class level routing
 - [x] Flash messages
 - [x] Hash argument in url helpers to generate query string suffix
-- [ ] Encrypted sessions with configurable key base
+- [x] Signed sessions with configurable key base
 - [ ] Port loads of rails helpers
 - [ ] Persistance strategies for models
 - [ ] Default MongoDB persistance strategy
@@ -42,3 +42,4 @@
 - [ ] CSRF protection with request token
 - [ ] Safe nested parameters (size/depth restriction like in Rack)
 - [ ] Default ecr escaping (impossible for the time being?)
+- [ ] Encrypt (on top of signing) sessions?
