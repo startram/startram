@@ -18,6 +18,7 @@
 - [x] Flash messages
 - [x] Hash argument in url helpers to generate query string suffix
 - [x] Signed sessions with configurable key base
+- [ ] Proper handling of accept / content-type
 - [ ] Port loads of rails helpers
 - [ ] Persistance strategies for models
 - [ ] Default MongoDB persistance strategy
