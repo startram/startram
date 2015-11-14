@@ -12,7 +12,13 @@ module Startram
 
       args = args.to_a
 
-      hash = args.pop as Hash if args.last.is_a?(Hash)
+      last = args.last?
+      if last.is_a?(Hash)
+        args.pop
+        hash = last
+      end
+
+      #hash = args.pop as Hash if args.last.is_a?(Hash)
 
       if args.length != @named_parameters.length
         raise ArgumentError.new("Expected arguments for :#{@named_parameters.join(", :")}, got: #{args}")

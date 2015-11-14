@@ -177,7 +177,7 @@ module Rack
         path: path,
         domain: domain,
         max_age: "0",
-        expires: Time.at(0)
+        expires: Time.epoch(0)
       )
     end
 

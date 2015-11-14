@@ -7,7 +7,7 @@ class TestModel
   field :name, String
   field :age, Int32
   field :height, Float64
-  field :poked_at, Time, default: -> { Time.at(108) }
+  field :poked_at, Time, default: -> { Time.epoch(108) }
   field :happy, Bool, default: true
 end
 
@@ -35,9 +35,9 @@ module Startram
 
         model.poked_at.should eq Time.parse("2015-04-22T13:24:42.484Z", "%FT%X.%L%z")
 
-        model.poked_at = Time.at(123456789)
+        model.poked_at = Time.epoch(123456789)
 
-        model.poked_at.should eq Time.at(123456789)
+        model.poked_at.should eq Time.epoch(123456789)
       end
 
       it "casts boolean" do
@@ -66,7 +66,7 @@ module Startram
         end
 
         it "runs a lambda" do
-          TestModel.new.poked_at.should eq Time.at(108)
+          TestModel.new.poked_at.should eq Time.epoch(108)
         end
 
         it "gets overridden by nil" do
